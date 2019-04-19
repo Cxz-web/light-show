@@ -7,8 +7,8 @@
 <script>
 import axios from 'axios'
 
-const UPLOAD_URL = 'http://127.0.0.1:7001/upload'
-const READ_URL = 'http://127.0.0.1:7001/public/ppt_data/'
+const UPLOAD_URL = 'https://www.cxzweb.club/api/upload'
+const READ_URL = 'https://www.cxzweb.club/api/public/ppt_data/'
 
 export default {
   name: 'app',
@@ -19,6 +19,7 @@ export default {
 	  }
   },
   created() {
+	  console.log(123, '有没打包进去')
 	  this.uploadURL = UPLOAD_URL
 	  this.readURL = READ_URL
   },
@@ -74,17 +75,7 @@ export default {
   margin-top: 60px;
 } */
 
-body, html {
-	padding: 0px;
-	margin: 0px;
-	width: 100%;
-	height: 100%;
-}
 
-#app{
-	width: 100%;
-	height: 100%;
-}
 
 
 </style>

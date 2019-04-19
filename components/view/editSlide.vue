@@ -119,7 +119,7 @@
 
 <script>
 
-	import ReadSlide from './readSlide.vue'
+	
 	let SAVE_DATA = null
 	let SAVE_TEMP = []
 	let READ_DATA = null
@@ -187,9 +187,6 @@
 		},
 		mounted() {
 			this.getScreenInfo()
-		},
-		components:{
-			ReadSlide
 		},
 		
 		

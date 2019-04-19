@@ -1,29 +1,32 @@
-# webpack-simple
+# ligh-show
++ 一个轻量级的ppt编辑器和阅读器
+### 安装
 
-## Project setup
-```
-npm install
-```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
+
+```javascript
+npm i -S light-show
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### 使用
 
-### Run your tests
-```
-npm run test
-```
++ 引入
 
-### Lints and fixes files
-```
-npm run lint
-```
+~~~javascript
+// main.js[入口文件]
+import LightShow from 'light-show'
+Vue.use(LightShow)
+~~~
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+这将会在全局注册两个组件 EidtSlide，和ReadSlide
+
+### EidtSlide组件
+
+组件将会暴露以下方法
+
++ createBacImgDom(path)
+
+~~~ javascript
+
+~~~
+

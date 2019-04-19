@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import "../components/index.js"
+import LightShow from "../components/index.js"
 
+Vue.use(LightShow)
 
 Vue.config.productionTip = false
 

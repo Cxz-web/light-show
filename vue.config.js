@@ -9,5 +9,7 @@ module.exports = {
       // 输出文件名
       filename: 'index.html'
     }
-  }
+  },
+  productionSourceMap: false,
+  css: { extract: false }
 }
