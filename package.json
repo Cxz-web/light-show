@@ -1,13 +1,20 @@
 {
-  "name": "webpack-simple",
-  "version": "0.1.0",
-  "private": true,
+  "name": "light-show",
+  "version": "0.1.3",
+  "description": "Contains a lightweight document editor and reader.",
+  "author": "XinZhu",
+  "main": "./dist/light-show.common.js",
+  "license": "MIT",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lib": "vue-cli-service build --target lib --name light-show --dest lib packages/index.js",
+    "package": "vue-cli-service build --target lib --name light-show --dest lib ./components/index.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "core-js": "^2.6.5",
     "vue": "^2.6.10"
   },
