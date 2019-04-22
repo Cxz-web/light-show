@@ -26,12 +26,15 @@
 		name: 'read-slide',
 		data() {
 			return{
+				height: 0,
 				currentPage: 0,
 				currentStep: 0,
 				canNext: true,
 				currentDomList: [],
 				index: 0,
-				last: false
+				last: false,
+				wk: 1, //长比例系数
+				hk: 1 // 高比例系数
 			}
 		},
 		
@@ -63,10 +66,10 @@
 		
 		methods: {
 			initData() {
+				this.height = document.body.clientHeight
 				const data = JSON.parse(localStorage.getItem('cxzppt')) 
 				READ_DATA = data[0]
 				BAC_DATA = data[1]
-				console.log(BAC_DATA)
 				this.$refs.ppt.style =  BAC_DATA[this.currentPage]
 			},
 			
@@ -123,6 +126,9 @@
 						if(item.moveIn) {
 							oDom.classList.add(item.moveIn)
 						}
+						if(item.fontSize) {
+							oDom.style.fontSize = parseFloat(item.fontSize) * this.height + 'px'
+						}
 						this.$refs.ppt.append(oDom)
 						
 					})
@@ -157,11 +163,23 @@
 				
 				console.log('当前页数据', READ_DATA[this.currentPage])
 				
+				
+				
+				
 				let domList = []
 				let domId = []
 				READ_DATA[this.currentPage][this.currentStep].forEach(item => {
-					let oDom = document.createElement('div')
-					console.log(item)
+					let oDom = undefined
+					console.log('读取的类型', item.domType, item)
+					if(item.domType === 'video') {
+						oDom = document.createElement('video')
+						oDom.src = item.src
+						oDom.autoplay = "true"
+						
+					}else {
+						oDom = document.createElement('div')
+					}
+					
 					item.css.forEach((className) => {
 						oDom.classList.add(className)
 					})
@@ -171,11 +189,14 @@
 					}
 					
 					oDom.id = item.id
-					oDom.class = item.css
 					oDom.classList.add('animated')
 					if(item.moveIn) {
 						oDom.classList.add(item.moveIn)
 					}
+					if(item.fontSize) {
+						oDom.style.fontSize = parseFloat(item.fontSize) * this.height + 'px'
+					}
+					
 					domList.push(oDom)
 					domId.push(oDom.id)
 					this.$refs.ppt.append(oDom)

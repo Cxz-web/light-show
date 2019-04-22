@@ -19,6 +19,18 @@ body, html {
 	background-color: transparent;
 	padding: 0px;
 	margin: 0px;
+	display: flex;
+	align-items: center;
+	box-sizing: border-box;
+}
+
+.__input:focus{
+	outline: none;
+}
+
+.__video {
+	border: 1px solid transparent;
+	background-origin: content-box;
 }
 
 /* .__input:focus {
@@ -37,10 +49,11 @@ body, html {
 	background-size: cover;
 	background-repeat: no-repeat;
 	position: absolute;
-	width: 200px;
-	height: 120px;
+	width: 20%;
+	height: 20%;
 	background-color: transparent;
 	border: 1px solid transparent;
+	background-origin: content-box;
 }
 
 .select__dom{
