@@ -22,6 +22,10 @@ export default {
 	  console.log(123, '有没打包进去')
 	  this.uploadURL = UPLOAD_URL
 	  this.readURL = READ_URL
+	  
+  },
+  mounted() {
+	  this.readData()
   },
   
   methods:{
@@ -50,13 +54,13 @@ export default {
 	
 	// 存储ppt数据
 	saveData(stringData) {
-		console.log(123)
 		localStorage.setItem('cxzppt', stringData)
 	},
 	
 	// 读取记录的ppt数据
 	readData() {
-		localStorage.getItem('cxzppt')
+		const stringData = localStorage.getItem('cxzppt')
+		this.$refs.slide.initData(stringData)
 		
 	}
 	

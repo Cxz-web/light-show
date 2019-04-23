@@ -211,11 +211,12 @@
 					'jackInTheBox'
 				],
 				canAddMove: true,
-				recordImg: []
+				recordImg: [],
+				imgTemp: []
 			}
 		},
 		created() {
-			// this.initData()
+			
 			
 		},
 		mounted() {
@@ -279,10 +280,19 @@
 			}
 		},
 		methods: {
+			initData(stringFile) {
+				SAVE_DATA = JSON.parse(stringFile)
+				this.recordTemp = SAVE_DATA[0]
+				this.recordImg = this.imgTemp = SAVE_DATA[1]
+				this.$refs.ppt.style =  this.recordImg[this.currentPage]
+				this.readDom()
+			},
+			
 			openColor(type, e) {
 				this.showColor = true
 				this.colorType = type
 			},
+			
 			colorPick(hex) {
 				if(this.colorType === 0) {
 					this.currentDom.style.color = hex
@@ -297,13 +307,6 @@
 			
 			close() {
 				this.showRead = false
-			},
-			initData() {
-				const url = remote.app.getPath('userData') + '/ReadyBoy.js'
-				fs.readFile(url, 'utf-8', (err, data) => {
-					READ_DATA = JSON.parse(data)
-					console.log(READ_DATA)
-				})
 			},
 				
 			
@@ -509,11 +512,11 @@
 				console.log('存储的数据1', temp)
 				this.recordTemp[this.currentPage] = temp
 				SAVE_TEMP[0] = this.recordTemp
-				let imgTemp = []
+				this.imgTemp = []
 				for(let i = 0; i < SAVE_TEMP[0].length; ++i) {
-					imgTemp[i] = this.recordImg[i] || ''
+					this.imgTemp[i] = this.recordImg[i] || ''
 				}
-				SAVE_TEMP[1] = imgTemp
+				SAVE_TEMP[1] = this.imgTemp
 				SAVE_DATA = JSON.stringify(SAVE_TEMP)
 				console.log('所有的数据', SAVE_DATA)
 				this.$emit('saveData', SAVE_DATA)

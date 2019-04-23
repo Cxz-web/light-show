@@ -1,6 +1,6 @@
 {
   "name": "light-show",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "description": "Contains a lightweight document editor and reader.",
   "author": "XinZhu",
   "main": "./lib/light-show.common.js",
