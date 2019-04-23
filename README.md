@@ -1,4 +1,7 @@
-# light-show
+# 📋 light-show  
+
+ 		---------------------- 🎈🎈🎈🎈🎈🎈🎈🎈， 不如一起来写PPT ？
+
 ### 简介
 
 + 一个vue框架下的轻量级的ppt编辑器和阅读器。
@@ -52,11 +55,10 @@ Vue.use(LightShow)
 export default {
     /* 其它代码 */
     methods:{
-        
         // 父组件订阅的事件， 保存数据的时候会触发该函数
-        saveData(stringData) {
-			localStorage.setItem('cxzppt', stringData)
-        }
+            saveData(stringData) {
+                localStorage.setItem('cxzppt', stringData)
+            }
 	}
     /* 其它代码 */
 }
@@ -128,8 +130,19 @@ export default {
 
 
 
-+ **createBacImgDom(path)**
-  + 生成图像节点
++ **createBacImgDom( path `string `)**
+  + 生成背景图像节点
   + path `string`  ： 图片的地址。
   + 示例：`this.$refs.lightShow.createImgDom(path)` ， 父组件调用子组件的方法。
++ **createImgDom( path `string`)**
+  + 生成图片节点
 
+### 结语
+
++ 做这个的原因其中一点是自己不怎么熟练使用ppt软件， 感觉很麻烦，所以想自己弄个比较简单的，基本功能满足需求的编辑器来，应付年终总结呀什么的。
+
++ 该项目会一直维护下去， 有bug一定会火速修复，欢迎提问，大家一起交流，一起学习 😁。
++ 后续的目标：
+  + 各种动画可以增加自定义功能
+  + 现在可以依靠后台生成简单的ppt，打算研究直接从前端生成ppt文件，不知道有没小伙伴有经验呢?指教指教我😊😊😊😊。
+  + 完成更加细粒度的展示， 但是前提还是以简单就能出效果为主。
