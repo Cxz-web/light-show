@@ -59,10 +59,11 @@
 		
 		// 读取记录的ppt数据
 		readData() {
-			axios.get('http://api.cxzweb.club/data.js').then((res) => {
-				let data = res.data
-				this.$refs.slide.initData(data)
-			})
+			let data = localStorage.getItem('cxzppt')
+			if(data) {
+				let json = JSON.parse(data)
+				this.$refs.slide.initData(json)
+			}
 		}
 		
 	  }

@@ -1,14 +1,31 @@
+const CompressionPlugin = require('compression-webpack-plugin')
 module.exports = {
-  // 将 examples 目录添加为新的页面
   pages: {
     index: {
-      // page 的入口
       entry: 'examples/main.js',
-      // 模板来源
       template: 'public/index.html',
-      // 输出文件名
       filename: 'index.html'
     }
   },
-  productionSourceMap: false
+  
+  productionSourceMap: false,
+  
+  chainWebpack: (config) => {  
+	config
+        .plugin('compression')
+        .use(CompressionPlugin, {
+          asset: '[path].gz[query]',
+          algorithm: 'gzip',
+          test: new RegExp('\\.(' + ['js', 'css'].join('|') + ')$'),
+          threshold: 10240,
+          minRatio: 0.8,
+          cache: true
+        })
+        .tap(args => { })
+  }
 }
+
+
+
+
+

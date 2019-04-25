@@ -76,13 +76,22 @@
 		methods: {
 			initData(requestData) {
 				this.height = document.body.clientHeight
+				
 				const data = requestData ? requestData : JSON.parse(localStorage.getItem('cxzppt'))
-				console.log(123, data)
+				
+				if(!data) {
+					this.$tip({content: '没有数据'})
+					this.$read.close()
+					this.close()
+					return
+				}
 				READ_DATA = data[0]
 				BAC_DATA = data[1]
 				this.$refs.ppt.style =  BAC_DATA[this.currentPage]
 				
 				let i = 0
+				
+				console.log('图片数据', data[2])
 				if(!Array.isArray(data[2]) )  {
 					this.$read.close().then(() => {
 						// this.$tip({content: '加载完毕'})
@@ -309,10 +318,6 @@
 		background-position: center;
 		transition:  opacity ease-in-out .4s;
 		opacity: 0;
-		/* width: 1000px;
-		height: 620px;
-		box-shadow: 0px 1px 20px 2px hotpink;
-		background-color: white; */	
 	}
 	
 	.read__opacity{
@@ -348,22 +353,24 @@
 	}
 	
 	.read__btn{
-		width: 200px;
+		width: 190px;
 		height: 40px;
 		position: absolute;
 		left: 50%;
-		transform: translateX(-50%);
+		margin-left: -95px;
 		bottom: 10px;
 		display: flex;
 		justify-content: space-between;
 		z-index: 3000;
 		align-items: center;
-		opacity: 0;
-		transition: opacity ease-in .4s;
+		opacity: 1;
+		transition: transform ease-in .2s;
+		font-weight: bold;
+		
 	}
 	
 	.read__btn:hover {
-		opacity: 1;
+		transform: scale(1.1);
 	}
 	
 	.read__icon{
@@ -381,7 +388,7 @@
 	.read__page {
 		color: #70A8AA;
 		font-family: "courier new";
-		font-size: 20px;
+		font-size: 22px;
 		font-weight: bold;
 	}
 	

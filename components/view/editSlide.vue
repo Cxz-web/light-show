@@ -379,8 +379,10 @@
 			
 			initData(stringFile) {
 				SAVE_DATA = stringFile
+				if(!Array.isArray(SAVE_DATA)) return
 				this.recordTemp = SAVE_DATA[0]
 				this.recordImg = this.imgTemp = SAVE_DATA[1]
+				this.loadList = SAVE_DATA[2]
 				this.$refs.ppt.style =  this.recordImg[this.currentPage]
 				this.id = parseInt(SAVE_DATA[3])
 				this.readDom()
