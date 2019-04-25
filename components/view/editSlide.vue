@@ -1,7 +1,7 @@
 <template>
 	<div class="edit__main" @click="cancaleSelect($event)" ref="main">
 		<div class="edit"  ref="wrap">
-			<read-slide v-if="showRead" @close="close"></read-slide>
+			<read-slide v-if="showRead" @close="close" ref="readSlide"></read-slide>
 			
 			
 			<div class="edit__wrap" ref="ppt"></div>
@@ -20,7 +20,7 @@
 						<label class="edit__icon bac_icon" >
 							<input type="file" style=" display: none;" @change="addImg($event, 'bacImg')" ref="bacSource">
 						</label>
-						<div class="title_tip">背景</div>
+						<div class="title_tip">背景图</div>
 					</div>
 					
 					<div class="edit__box edit__title" @click="addTitle">
@@ -35,7 +35,7 @@
 						<div class="sava_tip">保存</div>
 					</div>
 					
-					<div class="edit__box edit__title" @click="showRead=true">
+					<div class="edit__box edit__title" @click="openRead">
 						<div class="edit__icon read_icon" ></div>
 						<div class="title_tip" >预览</div>
 					</div>
@@ -43,6 +43,24 @@
 					<div class="edit__box edit__title" @click="addVideo">
 						<div class="edit__icon video_icon" ></div>
 						<div class="title_tip" >视频</div>
+					</div>
+					
+					
+					<div class="edit__box edit__title" >
+						<div class="edit__icon box__icon" @click="openBacWrap"></div>
+						<div class="title_tip" >背景色</div>
+						<transition name="fade">
+							<div class="bac__wrap" v-show="showBacWrap">
+								<div class="bac__box"><input type="text" class="font__input bac__input" v-model="bacLeft"> <span class="bac__color" @click="openBacColor(true)" :style="{backgroundColor: bacLeft, boxShadow: bacShadowLeft}"></span></div>
+								<div class="bac__box"><input type="text" class="font__input bac__input" v-model="bacRight"> <span class="bac__color" @click="openBacColor(false)" :style="{backgroundColor: bacRight, boxShadow: bacShadowRight}"></span></div>
+								
+								<transition name="fade">
+									<div class="color__picker color__picker--bac" v-show="showBacColor">
+										<div class="cp-default cx-default" ref="bacColor"></div>
+									</div>
+								</transition>
+							</div>
+						</transition>
 					</div>
 					
 					
@@ -64,21 +82,22 @@
 				
 				<!-- 文字操作框 -->
 				<div class="title__operation" v-show="showTitle">
+					
+					
+					<div class="edit__box" @click="cancelDom">
+						<div class="edit__icon cancel_icon"></div>
+						<div class="title_tip">删除</div>
+					</div>
+					
+					
 					<div class="edit__box" v-show="domType==='title'" @click="addBold">
 						<div class="edit__icon B_icon" :class="{BB_icon: currentBold==='bold'}"></div>
 						<div class="title_tip">加粗</div>
 					</div>
 					
-					<!-- 视频类特殊操作栏 -->
-					<template v-if="domType=='video'">
-						<div class="edit__box" >
-							<div class="title__size"><span class="title__name">地址:</span><input class="font__input" type="text" v-model="videoSrc"></div>
-						</div>
-						
-						<div class="edit__box">
-							<div class="title__size"><span class="title__name">模糊度</span><input class="font__input" type="text" v-model="blur"></div>
-						</div>
-					</template>
+					
+					
+					
 					
 					
 					
@@ -93,6 +112,17 @@
 							</div>
 						</transition>
 					</div>
+					
+					<!-- 视频类特殊操作栏 -->
+					<template v-if="domType=='video'">
+						<div class="edit__box" >
+							<div class="title__size"><span class="title__name">地址:</span><input class="font__input" style="border-bottom: 1px solid white;" type="text" v-model="videoSrc"></div>
+						</div>
+						
+						<div class="edit__box">
+							<div class="title__size"><span class="title__name">模糊度</span><input class="font__input" type="text" v-model="blur"></div>
+						</div>
+					</template>
 					
 					
 					<div class="edit__box">
@@ -148,6 +178,13 @@
 		name: 'edit-slide',
 		data() {
 			return {
+				bacShadowLeft: '',
+				bacShadowRight: '', 
+				bacSelect: null,
+				bacLeft: '#ffffff',
+				bacRight: '#ffffff',
+				showBacColor: false,
+				showBacWrap: false,
 				currentMove: 100,
 				colorType: 0,
 				showColor: false,
@@ -178,6 +215,7 @@
 				domType: null,
 				recordData: [],
 				recordTemp: [],
+				leaveTemp: [],
 				currentPage: 0,
 				target: 0,
 				blur: 0,
@@ -212,16 +250,19 @@
 				],
 				canAddMove: true,
 				recordImg: [],
-				imgTemp: []
+				imgTemp: [],
+				loadList: [],
+				bacColorList: []
 			}
 		},
 		created() {
 			
-			
 		},
 		mounted() {
 			this.getScreenInfo()
+			
 			colorPick = ColorPicker(this.$refs.color, this.colorPick)
+			colorPick = ColorPicker(this.$refs.bacColor, this.bacPick)
 		},
 		
 		
@@ -277,14 +318,71 @@
 			
 			currentLeaveOrder(newValue) {
 				this.currentDom.dataset.leaveOrder = newValue
+			},
+			
+			bacLeft(newValue) {
+				let str = `background-image:linear-gradient(135deg, ${newValue} 0%, ${this.bacRight} 100%);`
+				console.log(str)
+				console.log(this.$refs.ppt)
+				this.$refs.ppt.style = str
+				this.bacColorList[this.currentPage] = str
+			},
+			
+			bacRight(newValue) {
+				let str = `background-image:linear-gradient(135deg, ${this.bacLeft} 0%, ${newValue} 100%);`
+				console.log(str)
+				console.log(this.$refs.ppt)
+				this.$refs.ppt.style = str
+				this.bacColorList[this.currentPage] = str
 			}
+			
 		},
+		
 		methods: {
+			openBacWrap() {
+				this.showBacWrap = !this.showBacWrap
+				this.showBacColor = false
+				this.bacShadowLeft = ''
+				this.bacShadowRight = ''
+			},
+			bacPick(hex) {
+				console.log(hex)
+				this[this.bacSelect] = hex
+			},
+			openRead() {
+				this.showRead = true
+				this.$nextTick(() => {
+					this.$refs.readSlide.initData()
+				})
+				
+			},
+			
+			openBacColor(who) {
+				let str = '0px 0px 5px 4px #9face6'
+				if(who) {
+					this.bacShadowLeft = str
+					this.bacShadowRight = ''
+					this.bacSelect = 'bacLeft'
+				}else {
+					this.bacShadowRight = str
+					this.bacShadowLeft = ''
+					this.bacSelect = 'bacRight'
+				}
+				this.showBacColor = true
+			},
+			cancelDom() {
+				this.currentDom.parentNode.removeChild(this.currentDom)
+				this.currentDom = null
+				this.showTitle = false
+			},
+			
+			
 			initData(stringFile) {
-				SAVE_DATA = JSON.parse(stringFile)
+				SAVE_DATA = stringFile
 				this.recordTemp = SAVE_DATA[0]
 				this.recordImg = this.imgTemp = SAVE_DATA[1]
 				this.$refs.ppt.style =  this.recordImg[this.currentPage]
+				this.id = parseInt(SAVE_DATA[3])
 				this.readDom()
 			},
 			
@@ -406,7 +504,7 @@
 			// 添加文本框
 			addTitle() {
 				let oInput = document.createElement('input')
-				oInput.style = 'transition: transfrom linear 1s;transition: opacity linear 1s;position:absolute;font-size:20px;width:20%;height:6%;z-index:0;text-align: left;'
+				oInput.style = 'transition: transfrom linear 1s;transition: opacity linear 1s;position:absolute;font-size:20px;width:20%;height:6%;z-index:0;text-align: left;white-space: nowrap;'
 				oInput.dataset.fontSize = 20 / this.wrapH
 				oInput.classList.add('__input')
 				oInput.dataset.cTarget = this.target++
@@ -453,7 +551,7 @@
 				const value = `background-image:url(${imgURL});`
 				this.$refs.ppt.style =  value
 				this.recordImg[this.currentPage] = value
-				
+				this.loadList.push(imgURL)
 			},
 			
 			createImgDom(imgURL) {
@@ -467,6 +565,7 @@
 				oDiv.style =  `background-image:url(${imgURL}); transition: transfrom linear 1s;transition: opacity linear 1s;position:absolute;width:20%;height:20%;z-index:0;opacity:1`
 				this.addMoveListen(oDiv)
 				this.$refs.ppt.append(oDiv)
+				this.loadList.push(imgURL)
 			},
 			
 		
@@ -475,20 +574,18 @@
 				let list = Array.from(this.$refs.ppt.children)
 				console.log('当前页面的节点', list)
 				let temp = []
+				// let leaveTemp = []
 				list.forEach((item) => {
 					let dataset = JSON.parse(JSON.stringify(item.dataset))
-					 
-					 
 					let data = {
 						style: item.style.cssText,
 						id: item.id,
 						css: Array.from(item.classList),
-						content: item.value || undefined
+						content: item.value || undefined,
+						isLeave: false
 					}
 					
-					for(let i = 0; i < Object.keys(dataset).length; ++ i) {
-						
-					}
+	
 					
 					Object.keys(dataset).forEach((item) => {
 						data[item] = dataset[item]
@@ -508,17 +605,32 @@
 					} else{
 						temp[item.dataset.order] = [data] 
 					}
+					
+					if(item.dataset.leaveOrder > item.dataset.order) {
+						let newData = JSON.parse(JSON.stringify(data))
+						newData.isLeave = true
+						if(Array.isArray(temp[item.dataset.leaveOrder])) {
+							temp[item.dataset.leaveOrder].push(newData)
+						} else{
+							temp[item.dataset.leaveOrder] = [newData] 
+						}
+					}
+					
 				})
 				console.log('存储的数据1', temp)
 				this.recordTemp[this.currentPage] = temp
+				// this.leaveTemp[this.currentPage] = leaveTemp
 				SAVE_TEMP[0] = this.recordTemp
+				// SAVE_TEMP[2] = this.leaveTemp
 				this.imgTemp = []
 				for(let i = 0; i < SAVE_TEMP[0].length; ++i) {
-					this.imgTemp[i] = this.recordImg[i] || ''
+					this.imgTemp[i] = this.recordImg[i] ? this.recordImg[i] : this.bacColorList[i] ? this.bacColorList[i] : '' 
 				}
-				SAVE_TEMP[1] = this.imgTemp
+				SAVE_TEMP[1] = this.imgTemp // 背景图片
+				SAVE_TEMP[2] = this.loadList // 预加载数量
+				SAVE_TEMP[3] = this.id + 1
 				SAVE_DATA = JSON.stringify(SAVE_TEMP)
-				console.log('所有的数据', SAVE_DATA)
+				console.log('背景数据', this.imgTemp)
 				this.$emit('saveData', SAVE_DATA)
 			},
 			
@@ -600,6 +712,12 @@
 				this.showMove = false
 				this.currentDom = null
 				this.showTitle = false
+				
+				this.showBacColor =  false
+				this.showBacWrap =  false
+				this.bacShadowLeft = ''
+				this.bacShadowRight= ''
+				
 			},
 			
 			addBold() {
@@ -738,6 +856,40 @@
 		user-select: none;
 	}
 	
+	.bac__wrap{
+		position: absolute;
+		top: -170%;
+		width: 150px;
+		height: 75px;
+		box-sizing: border-box;
+		padding-left: 20px;
+		padding-right: 20px;
+		padding-top: 10px;
+		background-image: linear-gradient( 135deg, #90F7EC 10%, #32CCBC 100%);
+		border-radius: 10px;
+		box-shadow: 0px 1px 10px 0px #00B7C3;
+	}
+	
+	.bac__box{
+		display: flex;
+		
+	}
+	
+	.bac__color {
+		border-radius: 50%;
+		width: 20px;
+		height: 20px;
+		background-color: white;
+		margin-left: 15px;
+		position: relative;
+		top: 4px;
+		transition: transform .1s ease-in;
+	}
+	
+	.bac__color:active {
+		transform: scale(0.8);
+	}
+	
 	.edit__box>.title__size:first-child{
 		margin-bottom: 4px;
 	}
@@ -801,8 +953,24 @@
 		transform: scale(1.1);
 	}
 	
+	.box__icon{
+		background-image: url(./asserts/color.svg)
+	}
+	
+	.box__icon:active {
+		background-image: url(./asserts/color1.svg)
+	}
+	
 	.BB_icon {
 		background-image: url(./asserts/b3.svg)
+	}
+	
+	.cancel_icon {
+		background-image: url(./asserts/cancel1.svg)
+	}
+	
+	.cancel_icon:active {
+		background-image: url(./asserts/cancel.svg)
 	}
 	
 	
@@ -886,6 +1054,14 @@
 		outline: none;
 	}
 	
+	.bac__input{
+		border-bottom: 1px solid white;
+		width: 70px;
+		text-align: center;
+		letter-spacing: 1px;
+		margin-bottom: 5px;
+	}
+	
 	.title__name{
 		width: 50px;
 		text-align: left;
@@ -910,6 +1086,11 @@
 		position: absolute;
 		transform: translateY(-110%) translateX(-40%);
 		top: 0px;
+		z-index: 9999;
+	}
+	
+	.color__picker--bac {
+		transform: translateY(-107%)  translateX(-30%);;
 	}
 	
 	.cx-default{

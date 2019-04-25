@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-		<edit-slide @upload="upload"  @saveData="saveData" ref="slide"></edit-slide>
+		<router-view></router-view>
   </div>
 </template>
 
@@ -19,15 +19,12 @@ export default {
 	  }
   },
   created() {
-	  console.log(123, '有没打包进去')
-	  this.uploadURL = UPLOAD_URL
-	  this.readURL = READ_URL
-	  
+	 
   },
   mounted() {
-	  this.readData()
+	  
   },
-  
+ 
   methods:{
 	// 上传图片
 	async upload(file, type) {
@@ -59,9 +56,10 @@ export default {
 	
 	// 读取记录的ppt数据
 	readData() {
-		const stringData = localStorage.getItem('cxzppt')
-		this.$refs.slide.initData(stringData)
-		
+		axios.get('http://api.cxzweb.club/data.js').then((res) => {
+			let data = res.data
+			this.$refs.slide.initData(data)
+		})
 	}
 	
   }
@@ -70,16 +68,5 @@ export default {
 </script>
 
 <style>
-/* #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-} */
-
-
-
 
 </style>

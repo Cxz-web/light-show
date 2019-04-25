@@ -6,7 +6,7 @@
 
 + 一个vue框架下的轻量级的ppt编辑器和阅读器。
 + 国际惯例，先上demo，看看效果是否所需。
-  +  效果演示地址： www.cxzweb.club/light-show
+  +  效果演示地址： www.cxzweb.club/light-show/read
   + 编辑器展示地址： www.cxzweb.club/light-show/edit
 ### 安装
 

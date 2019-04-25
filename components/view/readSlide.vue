@@ -21,6 +21,7 @@
 	
 	let READ_DATA = null
 	let BAC_DATA = null
+	let LEAVE_DATA = null
 	let DOM_LIST = []
 	export default {
 		name: 'read-slide',
@@ -47,8 +48,11 @@
 			}
 		},
 		
+		created() {
+			this.$read.init()
+		},
+		
 		mounted() {
-			this.initData()
 			this.$refs.shade.addEventListener('animationend', () => {
 				this.$refs.shade.style = "display:none"
 				this.canNext = true
@@ -57,7 +61,12 @@
 				dom.classList.add('read__opacity')
 				dom.style =  BAC_DATA[this.currentPage]
 				if(this.last) {
-					this.createDom()
+					this.last = false
+					READ_DATA[this.currentPage].forEach((domList) => {
+						domList.forEach((item) => {
+							this.createToDom(item, true)
+						})
+					})
 				}
 				
 			})
@@ -65,12 +74,48 @@
 		
 		
 		methods: {
-			initData() {
+			initData(requestData) {
 				this.height = document.body.clientHeight
-				const data = JSON.parse(localStorage.getItem('cxzppt')) 
+				const data = requestData ? requestData : JSON.parse(localStorage.getItem('cxzppt'))
+				console.log(123, data)
 				READ_DATA = data[0]
 				BAC_DATA = data[1]
 				this.$refs.ppt.style =  BAC_DATA[this.currentPage]
+				
+				let i = 0
+				if(!Array.isArray(data[2]) )  {
+					this.$read.close().then(() => {
+						// this.$tip({content: '加载完毕'})
+					})
+					
+					return 
+				}
+				let length = data[2].length
+				if(length === 0) {
+					this.$read.close().then(() => {
+						// this.$tip({content: '加载完毕'})
+					})
+					return 
+				}
+				
+				
+				if(length > 0) {
+					data[2].forEach((item) => {
+						let oImg = new Image()
+						oImg.onload = () => {
+							++i
+							if( i >= length) {
+								this.$read.close()
+								// this.$tip({content: '加载完毕'})
+							}
+							oImg.onload = null
+							oImg = null
+							
+						}
+						oImg.src = item
+						
+					})
+				}
 			},
 			
 			close() {
@@ -84,6 +129,7 @@
 					if(this.currentPage === 0) {
 						this.currentStep = 0
 						console.log('当前页数据', READ_DATA[this.currentPage])
+						this.$tip({content: '第一页了哦！'})
 						return console.log('回到最初了')
 					} else{
 						this.currentPage  =  --this.currentPage < 0 ? 0 :  this.currentPage
@@ -96,10 +142,10 @@
 						return
 					}
 				}else {
-					console.log(DOM_LIST[this.index - 1], '要删除的节点')
+					console.log(DOM_LIST, '要删除的节点')
 					DOM_LIST[this.index - 1].forEach((item) => {
-						let child = document.getElementById(item)
-						child.parentNode.removeChild(child)
+						console.log('开始添加', item)
+						this.createToDom(item, false)
 					})
 					console.log(this.currentStep)
 					this.index --
@@ -140,13 +186,13 @@
 				if(!this.canNext) return
 				let data = READ_DATA[this.currentPage] || false
 				if(!data) {
-					return console.log('over')
+					return this.$tip({content: '最后页了哦！'})
 				}
 				
 				if(this.currentStep >= data.length) {
 					
 					if(this.currentPage + 1 >= READ_DATA.length) {
-						console.log('播放完毕')
+						this.$tip({content: '最后页了哦！'})
 						return 
 					} else {
 						this.currentPage = this.currentPage + 1
@@ -164,13 +210,44 @@
 				console.log('当前页数据', READ_DATA[this.currentPage])
 				
 				
-				
+			
 				
 				let domList = []
 				let domId = []
+				
+				
+				
+				
 				READ_DATA[this.currentPage][this.currentStep].forEach(item => {
-					let oDom = undefined
-					console.log('读取的类型', item.domType, item)
+					domList.push(item)
+					this.createToDom(item, true)
+				})
+				DOM_LIST[this.index] = domList
+				this.index ++
+				console.log('目前的栈', DOM_LIST)
+				this.currentStep++ 
+			},
+			
+			createToDom(item, reversal) {
+				
+				let condition = reversal ? item.isLeave : !item.isLeave
+				let oDom = undefined
+				// 删除本次要离开的节点
+				if(condition) {
+					let removeDom = document.getElementById(item.id)
+					removeDom.addEventListener('animationend', leaveMove) 
+					removeDom.classList.add('zoomOut')
+					
+					function leaveMove() {
+						removeDom.removeEventListener('animationend', leaveMove)
+						removeDom.parentNode.removeChild(removeDom)
+					}
+					
+					
+					// 
+				}else {
+					
+					// 生成节点
 					if(item.domType === 'video') {
 						oDom = document.createElement('video')
 						oDom.src = item.src
@@ -197,14 +274,12 @@
 						oDom.style.fontSize = parseFloat(item.fontSize) * this.height + 'px'
 					}
 					
-					domList.push(oDom)
-					domId.push(oDom.id)
+					console.log('开始生成', oDom)
 					this.$refs.ppt.append(oDom)
-				})
-				DOM_LIST[this.index] = domId
-				this.index ++
-				console.log('目前的栈', DOM_LIST)
-				this.currentStep++ 
+					
+				}
+				// 
+				
 			}
 		},
 	}

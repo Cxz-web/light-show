@@ -1,6 +1,6 @@
 {
   "name": "light-show",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Contains a lightweight document editor and reader.",
   "author": "XinZhu",
   "main": "./lib/light-show.common.js",
@@ -16,25 +16,22 @@
   "dependencies": {
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.6"
   },
-  
   "homepage": "https://github.com/Cxz-web/light-show",
   "repository": {
     "type": "git",
     "url": "https://github.com/Cxz-web/light-show"
   },
-  
   "keywords": [
     "vue",
     "component",
     "slide"
   ],
-  
   "bugs": {
     "url": "https://github.com/Cxz-web/light-show/issues"
   },
-  
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.1.1",
     "@vue/cli-plugin-eslint": "^3.1.1",
