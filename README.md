@@ -96,7 +96,7 @@ export default {
                 this.$refs.slide.createBacImgDom(path)
             }
         }
-	}
+    }
     /* 其它代码 */
 }
 ~~~
@@ -117,13 +117,13 @@ export default {
     	readData(stringData) {
             
             // 例如数据stringData是从本地取的，按照自己业务处理
-			localStorage.setItem('cxzppt', stringData)
+		localStorage.setItem('cxzppt', stringData)
             
             // edit-slide组件内部方法， 初始化编辑器数据， 可以不传该参数，表示重新开始编辑
-            this.$refs.slide.initData(stringData) 
+        	this.$refs.slide.initData(stringData) 
             
         }
-	}
+    }
     /* 其它代码 */
 }
 ~~~
