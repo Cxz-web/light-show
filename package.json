@@ -1,6 +1,6 @@
 {
   "name": "light-show",
-  "version": "0.2.0",
+  "version": "1.0.0-beta.2",
   "description": "Contains a lightweight document editor and reader.",
   "author": "XinZhu",
   "main": "./lib/light-show.common.js",
@@ -27,7 +27,9 @@
   "keywords": [
     "vue",
     "component",
-    "slide"
+    "slide",
+	"ppt",
+	"edit"
   ],
   "bugs": {
     "url": "https://github.com/Cxz-web/light-show/issues"

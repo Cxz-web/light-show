@@ -9,7 +9,7 @@
 	
 	const UPLOAD_URL = 'https://www.cxzweb.club/api/upload'
 	const READ_URL = 'https://www.cxzweb.club/api/public/ppt_data/'
-	
+	const TEST_URL = 'https://www.cxzweb.club/api/public/data3.json'
 	export default {
 	  name: 'app',
 	  data() {
@@ -19,18 +19,17 @@
 		  }
 	  },
 	  created() {
-		  console.log(123, '有没打包进去')
 		  this.uploadURL = UPLOAD_URL
 		  this.readURL = READ_URL
-		  
 	  },
 	  mounted() {
-		  this.readData()
+		  this.readData()		  
 	  },
 	 
 	  methods:{
 		// 上传图片
 		async upload(file, type) {
+			this.$waiting.add()
 			const options = {
 				url: UPLOAD_URL,
 				method: 'post',
@@ -49,21 +48,23 @@
 			}else if(type === 'bacImg') {
 				this.$refs.slide.createBacImgDom(path)
 			}
+			this.$waiting.close()
 			
 		},
 		
 		// 存储ppt数据
 		saveData(stringData) {
 			localStorage.setItem('cxzppt', stringData)
+			this.$tip({content: '保存成功'})
 		},
 		
 		// 读取记录的ppt数据
 		readData() {
 			let data = localStorage.getItem('cxzppt')
-			if(data) {
-				let json = JSON.parse(data)
-				this.$refs.slide.initData(json)
-			}
+			let json = data ? JSON.parse(data) : undefined
+			console.log(json)
+			this.$refs.slide.initData(json)
+			
 		}
 		
 	  }
@@ -75,5 +76,7 @@
 	.example__read {
 		width: 100%;
 		height: 100%;
+		position: relative;
+		overflow: hidden;
 	}
 </style>

@@ -167,8 +167,6 @@
 </template>
 
 <script>
-
-	
 	let SAVE_DATA = null
 	let SAVE_TEMP = []
 	let READ_DATA = null
@@ -256,11 +254,10 @@
 			}
 		},
 		created() {
-			
+			this.$waiting.add()
 		},
 		mounted() {
 			this.getScreenInfo()
-			
 			colorPick = ColorPicker(this.$refs.color, this.colorPick)
 			colorPick = ColorPicker(this.$refs.bacColor, this.bacPick)
 		},
@@ -268,7 +265,6 @@
 		
 		watch: {
 			blur(newValue) {
-				// filter: blur(3px);
 				console.log(`blur:(${newValue}px)`)
 				this.currentDom.style.filter = `blur(${newValue}px)`
 			},
@@ -352,7 +348,7 @@
 			openRead() {
 				this.showRead = true
 				this.$nextTick(() => {
-					this.$refs.readSlide.initData()
+					this.$refs.readSlide.initData(SAVE_DATA)
 				})
 				
 			},
@@ -378,6 +374,7 @@
 			
 			
 			initData(stringFile) {
+				this.$waiting.close()
 				SAVE_DATA = stringFile
 				if(!Array.isArray(SAVE_DATA)) return
 				this.recordTemp = SAVE_DATA[0]
@@ -574,9 +571,7 @@
 			// 保存数据
 			save() {
 				let list = Array.from(this.$refs.ppt.children)
-				console.log('当前页面的节点', list)
 				let temp = []
-				// let leaveTemp = []
 				list.forEach((item) => {
 					let dataset = JSON.parse(JSON.stringify(item.dataset))
 					let data = {
@@ -587,8 +582,6 @@
 						isLeave: false
 					}
 					
-	
-					
 					Object.keys(dataset).forEach((item) => {
 						data[item] = dataset[item]
 					})
@@ -597,10 +590,7 @@
 					if(data.domType === 'video') {
 						data.src = item.src
 					}
-// 					if(data.domType === 'title') {
-// 						data.fontSize = item.dataset.fontSize
-// 					}
-					
+
 					
 					if(Array.isArray(temp[item.dataset.order])) {
 						temp[item.dataset.order].push(data)
@@ -619,11 +609,8 @@
 					}
 					
 				})
-				console.log('存储的数据1', temp)
 				this.recordTemp[this.currentPage] = temp
-				// this.leaveTemp[this.currentPage] = leaveTemp
 				SAVE_TEMP[0] = this.recordTemp
-				// SAVE_TEMP[2] = this.leaveTemp
 				this.imgTemp = []
 				for(let i = 0; i < SAVE_TEMP[0].length; ++i) {
 					this.imgTemp[i] = this.recordImg[i] ? this.recordImg[i] : this.bacColorList[i] ? this.bacColorList[i] : '' 
@@ -632,7 +619,6 @@
 				SAVE_TEMP[2] = this.loadList // 预加载数量
 				SAVE_TEMP[3] = this.id + 1
 				SAVE_DATA = JSON.stringify(SAVE_TEMP)
-				console.log('背景数据', this.imgTemp)
 				this.$emit('saveData', SAVE_DATA)
 			},
 			
@@ -695,14 +681,6 @@
 						this.currentY = parseFloat(dom.style.top)
 					}
 				}
-// 				dom.onfocus = () => {
-// 					
-// 					
-// 				}
-// 				dom.onblur = () => {
-// 					this.showTitle = false
-
-// 				}
 			},
 			
 			cancaleSelect(e) {
@@ -772,9 +750,11 @@
 </script>
 
 <style scoped>
+	
 	@import url("./ppt.css");
 	@import url("./animate.min.css");
 	@import url("themes.css");
+	
 	.edit{
 		width: 83%;
 		background-color: white;

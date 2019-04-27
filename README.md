@@ -1,11 +1,13 @@
 # 📋 light-show  
 
- 		---------------------- 🎈🎈🎈🎈🎈🎈🎈🎈， 不如一起来写PPT ？
+ 		---------------------- 🎈🎈🎈🎈🎈🎈🎈🎈， 不如一起来写PPT ！！1
 
 ### 简介
 
-+ 一个vue框架下的轻量级的ppt编辑器和阅读器。
-+ 国际惯例，先上demo。
++ 一个vue框架下轻量级的类PPT**演示文稿制作库**, 集合了在线内容编辑和演示的功能。
++ 完全重新开发的一套库，和impress.js等其它ppt库不一样的地方是 ，本插件能完全对内容（图片，视频，文字）进行**逐步**展示而不是只能通过换页，并且不需要代码进行构建内容(如插入html或者读取markdown),通过编辑器尽可能还原ppt的基础功能，但操作起来更加的简单。
++ 通过一些开放的api, 可以自定义一些文稿展示的细节。
++ 国际惯例，在线demo。
   +  效果演示地址： https://www.cxzweb.club/#/light-show/read
   + 编辑器展示地址： https://www.cxzweb.club/#/light-show/edit
 ### 安装
@@ -28,7 +30,7 @@ Vue.use(LightShow)
 
 这将会在全局注册两个组件 EidtSlide（编辑器），和ReadSlide（阅读器），下面是两个组件的使用方法。
 
-### EidtSlide组件
+### EidtSlide组件（编辑器）
 
 + 使用
 
@@ -40,7 +42,7 @@ Vue.use(LightShow)
 
 该组件详情如下：
 
-##### edit-slide组件派发的事件
+##### edit-slide组件派发出来的事件
 
 + **saveData事件**
 
@@ -103,10 +105,10 @@ export default {
 
 
 
-#####  组件的内部方法
+#####  组件的内部方法 
 
 + **initData(stringData `string|undefined` )**
-  + 初始化编辑器的的数据。
+  + 初始化编辑器的的数据， ***初始化编辑器组件的时候必须调用该函数***，可以不传参数。
   + 把saveData 传进这个函数即可， 主动调用初始化编辑器的数据。
 
 ~~~ javascript
@@ -131,11 +133,99 @@ export default {
 
 
 + **createBacImgDom( path `string `)**
-  + 生成背景图像节点
+  + 生成当前页的背景图像
   + path `string`  ： 图片的地址。
-  + 示例：`this.$refs.lightShow.createImgDom(path)` ， 父组件调用子组件的方法。
+  + 示例：`this.$refs.lightShow.createBacImgDom(path)` ， 父组件调用子组件的方法。
 + **createImgDom( path `string`)**
   + 生成图片节点
+  + path`string`: 服务器返回的图片的地址
+  + this.$refs.lightShow.createImgDom(path)
+
+### ReadSlide组件（阅读器）
+
+##### 阅读器组件派发的事件
+
++ getPage
+
+~~~javascript
+
+/** 
+*  < 父组件订阅的事件， ppt页码切换的时候触发。>
+*  @param [currentPage] [当前页码]
+*  @param [totalPage] [总页码]
+*  @param [step] [当前步骤： 0：表示ppt最初的状态， 1： 表示在演示的过程： 2： 表示已结束]
+*/
+<template>
+    <div class="app">
+        <read-slide @getPage="getPage"></read-slide>
+    </div>
+</template>
+
+export default {
+    /* 其它代码 */
+    methods:{ 
+            getPage(currentPage, totalPage, step) {
+                // 自定义一些功能。
+            }
+	}
+    /* 其它代码 */
+}
+~~~
+
+##### 组件方法
+
++ initData(data)
+
+~~~ javascript
+/**
+* < 阅读器初始化数据函数， 必须调用 >
+* @param [data] [编辑器保存的数据，直接传进去即可。]
+**/
+<template>
+    <div class="app">
+        <read-slide ref="read"></read-slide>
+    </div>
+</template>
+
+export default {
+    /* 其它代码 */
+    methods:{
+        // 父组件在mounted生命周期调用该函数
+        init() {
+            let data = getData() // 伪代码， 你获取到的编辑器保存的数据
+            this.$refs.read.initData(data)
+        },
+	}
+    /* 其它代码 */
+}
+
+
+~~~
+
+
+
+### 该插件还给vue注册了一些函数生成辅助的组件。
+
++ tip组件
+
+~~~javascript
+// 全局生成提示框
+this.$tip（{content: '你好呀'}）
+~~~
+
++ waiting组件
+
+~~~ javascript
+// 开启loading
+this.$waiting.add()
+
+// 取消loading
+this.$waiting.close()
+~~~
+
+### 更新
+
+由于该版本还在功能完善阶段，更新会比较频繁， 后续的变动都会在此处说明。
 
 ### 结语
 
@@ -145,4 +235,4 @@ export default {
 + 后续的目标：
   + 各种动画可以增加自定义功能
   + 现在可以依靠后台生成简单的ppt，打算研究直接从前端生成ppt文件，不知道有没小伙伴有经验呢?指教指教我😊😊😊😊。
-  + 完成更加细粒度的展示， 但是前提还是以简单就能出效果为主。
+  + 完成更加细粒度的展示， 但是前提是操作一定要简单！！！。

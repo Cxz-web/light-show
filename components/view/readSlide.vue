@@ -21,8 +21,8 @@
 	
 	let READ_DATA = null
 	let BAC_DATA = null
-	let LEAVE_DATA = null
 	let DOM_LIST = []
+	let LENGTH = 0
 	export default {
 		name: 'read-slide',
 		data() {
@@ -41,10 +41,10 @@
 		
 		
 		watch: {
-			currentPage(newValue, oldValue) {
+			currentPage(newValue) {
 				let dom = this.$refs.ppt
 				dom.classList.remove('read__opacity')
-
+				this.$emit('getPage', newValue + 1, LENGTH, 1)
 			}
 		},
 		
@@ -76,8 +76,8 @@
 		methods: {
 			initData(requestData) {
 				this.height = document.body.clientHeight
-				
-				const data = requestData ? requestData : JSON.parse(localStorage.getItem('cxzppt'))
+
+				let data = requestData ? requestData : JSON.parse(localStorage.getItem('cxzppt'))
 				
 				if(!data) {
 					this.$tip({content: '没有数据'})
@@ -85,25 +85,22 @@
 					this.close()
 					return
 				}
+				if(typeof data === 'string') {
+					data = JSON.parse(data)
+				}
+				
 				READ_DATA = data[0]
+				LENGTH = READ_DATA.length
 				BAC_DATA = data[1]
 				this.$refs.ppt.style =  BAC_DATA[this.currentPage]
-				
 				let i = 0
-				
-				console.log('图片数据', data[2])
 				if(!Array.isArray(data[2]) )  {
-					this.$read.close().then(() => {
-						// this.$tip({content: '加载完毕'})
-					})
-					
+					this.$read.close()					
 					return 
 				}
 				let length = data[2].length
 				if(length === 0) {
-					this.$read.close().then(() => {
-						// this.$tip({content: '加载完毕'})
-					})
+					this.$read.close()
 					return 
 				}
 				
@@ -115,7 +112,6 @@
 							++i
 							if( i >= length) {
 								this.$read.close()
-								// this.$tip({content: '加载完毕'})
 							}
 							oImg.onload = null
 							oImg = null
@@ -133,32 +129,24 @@
 			
 			back() {
 				this.currentStep --
-				console.log('目前索引', this.currentStep)
 				if(this.currentStep < 0) {
 					if(this.currentPage === 0) {
 						this.currentStep = 0
-						console.log('当前页数据', READ_DATA[this.currentPage])
 						this.$tip({content: '第一页了哦！'})
-						return console.log('回到最初了')
+						this.$emit('getPage', 1, LENGTH, 0)
+						return 
 					} else{
 						this.currentPage  =  --this.currentPage < 0 ? 0 :  this.currentPage
 						this.currentStep = READ_DATA[this.currentPage].length 
-						console.log('上一页', this.currentPage)
 						this.last = true
 						this.$refs.shade.style = "display: flex;"
-						console.log(DOM_LIST[this.index - 1], this.currentStep)
-						console.log('当前页数据', READ_DATA[this.currentPage])
 						return
 					}
 				}else {
-					console.log(DOM_LIST, '要删除的节点')
 					DOM_LIST[this.index - 1].forEach((item) => {
-						console.log('开始添加', item)
 						this.createToDom(item, false)
 					})
-					console.log(this.currentStep)
 					this.index --
-					console.log('当前页数据', READ_DATA[this.currentPage])
 				}
 			},
 			
@@ -195,12 +183,14 @@
 				if(!this.canNext) return
 				let data = READ_DATA[this.currentPage] || false
 				if(!data) {
+					
 					return this.$tip({content: '最后页了哦！'})
 				}
 				
 				if(this.currentStep >= data.length) {
 					
 					if(this.currentPage + 1 >= READ_DATA.length) {
+						this.$emit('getPage', LENGTH + 1, LENGTH, 2)
 						this.$tip({content: '最后页了哦！'})
 						return 
 					} else {
@@ -214,26 +204,13 @@
 						return
 					}
 				}
-				
-				
-				console.log('当前页数据', READ_DATA[this.currentPage])
-				
-				
-			
-				
 				let domList = []
-				let domId = []
-				
-				
-				
-				
 				READ_DATA[this.currentPage][this.currentStep].forEach(item => {
 					domList.push(item)
 					this.createToDom(item, true)
 				})
 				DOM_LIST[this.index] = domList
 				this.index ++
-				console.log('目前的栈', DOM_LIST)
 				this.currentStep++ 
 			},
 			
@@ -251,8 +228,7 @@
 						removeDom.removeEventListener('animationend', leaveMove)
 						removeDom.parentNode.removeChild(removeDom)
 					}
-					
-					
+				
 					// 
 				}else {
 					
@@ -282,8 +258,6 @@
 					if(item.fontSize) {
 						oDom.style.fontSize = parseFloat(item.fontSize) * this.height + 'px'
 					}
-					
-					console.log('开始生成', oDom)
 					this.$refs.ppt.append(oDom)
 					
 				}
@@ -358,7 +332,7 @@
 		position: absolute;
 		left: 50%;
 		margin-left: -95px;
-		bottom: 10px;
+		bottom: 20px;
 		display: flex;
 		justify-content: space-between;
 		z-index: 3000;

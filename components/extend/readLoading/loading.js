@@ -8,7 +8,6 @@ let loading = {
 		
 		let instances = new LoadingConstructor();
 		this.obj = instances.$mount();
-		console.log(12312321, this.obj.$el)
 		document.body.appendChild(this.obj.$el);
 		return instances.vm;
 	},

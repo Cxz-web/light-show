@@ -5,9 +5,10 @@ import EditSlide from "./view/editSlide.vue"
 import ReadSlide from "./view/readSlide.vue"
 
  // 函数式组件
- import bac from './extend/bac/bac.js'
+ import waiting from './extend/bac/bac.js'
  import readLoaing from './extend/readLoading/loading.js'
  import tip from './extend/tip/tip.js'
+ 
  
 
 
@@ -35,7 +36,7 @@ const install = function(Vue, opts = {}) {
     Vue.component(component.name, component);
   });
 
-  Vue.prototype.$loading = bac
+  Vue.prototype.$waiting = waiting
   Vue.prototype.$read = readLoaing
   Vue.prototype.$tip = tip
 };
