@@ -1,6 +1,6 @@
 <template>
 	<div class="example__read">
-		<read-slide ref="read" v-show="!showIndx" @getPage="getPage"></read-slide>
+		<read-slide ref="read" v-if="!showIndx" @getPage="getPage"></read-slide>
 		
 		<example-index @close="closeIndex" v-if="showIndx"></example-index>
 		
@@ -9,7 +9,7 @@
 				<p class="title1">Thanks you!</p>
 				<p class="title2">如果对你有帮助, 来个star吧!</p>
 				<div class="over__btn">
-					<git-hub></git-hub>
+					<git-hub @openGitHub="openGitHub"></git-hub>
 					<div class="over__close" @click.stop="showOver=false">取消</div>
 				</div>
 			</div>
@@ -48,6 +48,10 @@
 		},
 		
 		methods: {
+			openGitHub() {
+				console.log(123)
+				window.open('https://github.com/Cxz-web/light-show')
+			},
 			getPage(currentPage, totalPage, step) {
 				let show = currentPage >= totalPage ? true : false
 				let id = null
@@ -67,8 +71,8 @@
 					this.readData()
 				})
 			},
-			openEdit() {
-				window.open('https://www.cxzweb.club/#/light-show/edit')
+			openEdit(url) {
+				window.open(url)
 			},
 			
 			readData() {

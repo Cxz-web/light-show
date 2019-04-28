@@ -7,8 +7,8 @@
 		<div class="index__desc">一个Vue框架下的的PPT编辑器和阅读器</div>
 		<div class="index__desc">来一起看看效果吧!!</div>
 
-		<div class="github" @click.stop="openGitHub">
-			<git-hub></git-hub>
+		<div class="github">
+			<git-hub @openGitHub="openGitHub"></git-hub>
 		</div>
 		
 		<div class="index__icon"></div>
@@ -31,8 +31,8 @@
 			GitHub
 		},
 		methods: {
-			openGitHub() {
-				window.open('https://github.com/Cxz-web/light-show')
+			openGitHub(url) {
+				window.open(url)
 			},
 			goRead() {
 				this.$emit('close')

@@ -95,13 +95,6 @@
 						<div class="title_tip">加粗</div>
 					</div>
 					
-					
-					
-					
-					
-					
-					
-					
 					<div class="edit__box" @click="showMove= !showMove">
 						<div class="edit__icon move_icon"></div>
 						<div class="title_tip" >动画</div>
@@ -258,10 +251,16 @@
 		},
 		mounted() {
 			this.getScreenInfo()
+			window.onresize = () => {
+				this.getScreenInfo()
+			}
 			colorPick = ColorPicker(this.$refs.color, this.colorPick)
 			colorPick = ColorPicker(this.$refs.bacColor, this.bacPick)
 		},
 		
+		beforeDestroy() {
+			window.onresize = null
+		},
 		
 		watch: {
 			blur(newValue) {
@@ -443,56 +442,49 @@
 				this.readDom()
 			},
 			
+			createDom(oDom, item) {
+				item.css.forEach((className) => {
+					oDom.classList.add(className)
+				})
+				oDom.style = item.style
+				oDom.value = item.content
+				oDom.id = item.id
+				oDom.dataset.domType = item.domType
+				oDom.dataset.moveIn = item.moveIn
+				oDom.dataset.order = item.order
+				oDom.dataset.left = item.left
+				oDom.dataset.top = item.top
+				oDom.dataset.leaveOrder = item.leaveOrder
+				this.addMoveListen(oDom)
+				this.$refs.ppt.append(oDom)
+			},
+			
 			
 			readDom() {
-				
 				let data = this.recordTemp[this.currentPage]
-				
 				if(!data || data.length === 0) return
-				
 				data.forEach( (currentList) => {
+					if(!Array.isArray(currentList) || currentList.length === 0) return
 					currentList.forEach((item) => {
-						if(item.domType === 'title'){
-							let oDom = document.createElement('input')
-							item.css.forEach((className) => {
-								oDom.classList.add(className)
-							})
-							oDom.style = item.style
-							oDom.value = item.content
-							oDom.id = item.id
-							item.css.forEach((className) => {
-								oDom.classList.add(className)
-							})
-							oDom.dataset.domType = item.domType
-							oDom.dataset.moveIn = item.moveIn
-							oDom.dataset.order = item.order
-							oDom.dataset.left = item.left
-							oDom.dataset.top = item.top
-							oDom.dataset.leaveOrder = item.leaveOrder
-							// oDom.dataset = item.dataset
-							console.log('mydom', oDom)
-							this.addMoveListen(oDom)
-							this.$refs.ppt.append(oDom)
-						}else if(item.domType === 'img') {
-							let oDom = document.createElement('div')
-							item.css.forEach((className) => {
-								oDom.classList.add(className)
-							})
-							oDom.style = item.style
-							oDom.id = item.id
-							item.css.forEach((className) => {
-								oDom.classList.add(className)
-							})
-							oDom.dataset.domType = item.domType
-							oDom.dataset.moveIn = item.moveIn
-							oDom.dataset.order = item.order
-							oDom.dataset.left = item.left
-							oDom.dataset.top = item.top
-							oDom.dataset.leaveOrder = item.leaveOrder
-							// oDom.dataset = item.dataset
-							console.log('mydom', oDom)
-							this.addMoveListen(oDom)
-							this.$refs.ppt.append(oDom)
+						
+						let oDom = ''
+						switch (item.domType){
+							case 'title':
+								oDom = document.createElement('input')
+								oDom.autocomplete = 'off'
+								this.createDom(oDom, item)
+								break;
+							case 'img':
+								oDom = document.createElement('div')
+								this.createDom(oDom, item)
+								break;
+							case 'video':	
+								console.log('video', item)
+								oDom = document.createElement('video')
+								oDom.src = item.src
+								oDom.controls = true
+								this.createDom(oDom, item)
+								break;
 						}
 					})
 				})
@@ -582,6 +574,7 @@
 						isLeave: false
 					}
 					
+					
 					Object.keys(dataset).forEach((item) => {
 						data[item] = dataset[item]
 					})
@@ -638,14 +631,13 @@
 					this.showColor = false
 					this.showMove = false
 					this.domType = dom.dataset.domType
-					console.log('dom类型', this.domType)
 					dom.classList.add('select__dom')
 					this.x = e.offsetX
 					this.y = e.offsetY
 					
 					
 			
-					if(this.currentDom && this.currentDom.dataset.cTarget != dom.dataset.cTarget) {
+					if(this.currentDom && this.currentDom.id != dom.id) {
 						this.currentDom.classList.remove('select__dom')
 					}
 					
@@ -732,18 +724,6 @@
 				dom.dataset.moveIn = item
 				dom.dataset.currentMove = index
 				this.currentMove = index
-			},
-						
-			upload() {
-				let source = this.$refs.source
-				console.log(source)
-				var reader = new FileReader();
-				reader.onload = function(e) {
-					fs.writeFile(remote.app.getPath('userData') + '/test.png', reader.result,  "binary", function() {
-						console.log(123)
-					})
-				}
-				reader.readAsBinaryString(source.files[0])
 			}
 		}
 	}
