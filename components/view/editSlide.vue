@@ -533,7 +533,7 @@
 				oVideo.id = 'cxz' + this.id ++
 				oVideo.controls = 'controls'
 				oVideo.loop = 'loop'
-				oVideo.src = 'http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4' 
+				oVideo.src = 'https://api.cxzweb.club/test.mp4' 
 				this.addMoveListen(oVideo)
 				this.$refs.ppt.append(oVideo)
 				oVideo.play()
