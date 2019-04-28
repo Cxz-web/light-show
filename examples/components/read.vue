@@ -53,9 +53,8 @@
 				}
 			},
 			
-			openGitHub() {
-				console.log(123)
-				window.open('https://github.com/Cxz-web/light-show')
+			openGitHub(url) {
+				window.open(url)
 			},
 			getPage(currentPage, totalPage, step) {
 				let show = currentPage >= totalPage ? true : false
@@ -76,8 +75,8 @@
 					this.readData()
 				})
 			},
-			openEdit(url) {
-				window.open(url)
+			openEdit() {
+				window.open('https://www.cxzweb.club/#/light-show/edit')
 			},
 			
 			readData() {
