@@ -21,12 +21,19 @@
 	  created() {
 		  this.uploadURL = UPLOAD_URL
 		  this.readURL = READ_URL
+		  this.judgeSystem()
 	  },
 	  mounted() {
-		  this.readData()		  
+		  this.readData()
+		  
 	  },
 	 
 	  methods:{
+		judgeSystem() {
+		  	if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
+		  		this.$router.push('/light-show/error')
+		  	}
+		},
 		// 上传图片
 		async upload(file, type) {
 			this.$waiting.add()

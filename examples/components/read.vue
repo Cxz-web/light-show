@@ -42,8 +42,17 @@
 			ExampleIndex,
 			GitHub
 		},
+		created() {
+			this.judgeSystem()
+		},
 		
 		methods: {
+			judgeSystem() {
+				if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
+					this.$router.push('/light-show/error')
+				}
+			},
+			
 			openGitHub() {
 				console.log(123)
 				window.open('https://github.com/Cxz-web/light-show')
