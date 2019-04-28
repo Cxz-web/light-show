@@ -10,7 +10,7 @@
 </script>
 
 <style scoped>
-	@import url("../../view/animate.min.css");
+	@import url("../../public/css/animate.min.css");
 	.lightShow__tip {
 		width: 30vmin;
 		height: 6vmin;

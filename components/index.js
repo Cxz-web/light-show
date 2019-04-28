@@ -1,10 +1,10 @@
 import Vue from "vue";
 
-// 组件
+// 核心组件
 import EditSlide from "./view/editSlide.vue"
 import ReadSlide from "./view/readSlide.vue"
 
- // 函数式组件
+ // 辅助组件
  import waiting from './extend/bac/bac.js'
  import readLoaing from './extend/readLoading/loading.js'
  import tip from './extend/tip/tip.js'
