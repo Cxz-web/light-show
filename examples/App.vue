@@ -7,7 +7,7 @@
 <script>
 	export default {
 		created() {
-			console.log('hellow world')
+			console.log('v1.0.0-beta.11', 1)
 			console.log('%c light-show GitHub地址:','background:#aaa;color:#fff','https://github.com/Cxz-web/light-show')
 		}
 	}
