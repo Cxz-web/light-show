@@ -38,10 +38,6 @@
 			}
 		},
 		
-		mounted() {
-			
-		},
-		
 		components: {
 			ExampleIndex,
 			GitHub

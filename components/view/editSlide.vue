@@ -164,7 +164,7 @@
 	let SAVE_TEMP = []
 	let READ_DATA = null
 	let colorPick = null
-	import ColorPicker from './colorpicker.js'
+	import ColorPicker from '../public/js/colorpicker.js'
 	export default {
 		name: 'edit-slide',
 		data() {
@@ -249,6 +249,7 @@
 		created() {
 			this.$waiting.add()
 		},
+		
 		mounted() {
 			this.getScreenInfo()
 			window.onresize = () => {
@@ -731,9 +732,9 @@
 
 <style scoped>
 	
-	@import url("./ppt.css");
-	@import url("./animate.min.css");
-	@import url("themes.css");
+	@import url("../public/css/ppt.css");
+	@import url("../public/css/animate.min.css");
+	@import url("../public/css/themes.css");
 	
 	.edit{
 		width: 83%;

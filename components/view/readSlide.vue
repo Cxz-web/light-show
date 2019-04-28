@@ -268,9 +268,9 @@
 	}
 </script>
 
-<style>
-	@import url("./ppt.css");
-	@import url("./animate.min.css");
+<style scoped>
+	@import url("../public/css/ppt.css");
+	@import url("../public/css/animate.min.css");
 	.read__wrap{
 		width: 100%;
 		height: 100%;
