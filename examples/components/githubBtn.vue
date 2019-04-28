@@ -1,9 +1,19 @@
 <template>
-	<div class="index__github">
+	<div class="index__github" @click="openGitHub">
 		<span class="github__icon"></span>
 		<span class="github__title">GitHub</span>
 	</div>
 </template>
+
+<script>
+	export default {
+		methods: {
+			openGitHub() {
+				this.$emit('openGitHub', 'https://github.com/Cxz-web/light-show')
+			}
+		}
+	}
+</script>
 
 
 <style scoped>

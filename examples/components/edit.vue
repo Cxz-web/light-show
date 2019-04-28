@@ -9,7 +9,7 @@
 	
 	const UPLOAD_URL = 'https://www.cxzweb.club/api/upload'
 	const READ_URL = 'https://www.cxzweb.club/api/public/ppt_data/'
-	const TEST_URL = 'https://www.cxzweb.club/api/public/data3.json'
+	const TEST_URL = 'https://www.cxzweb.club/api/public/data2.json'
 	export default {
 	  name: 'app',
 	  data() {
@@ -62,8 +62,10 @@
 		readData() {
 			let data = localStorage.getItem('cxzppt')
 			let json = data ? JSON.parse(data) : undefined
-			console.log(json)
 			this.$refs.slide.initData(json)
+			// axios.get(TEST_URL).then((res) => {
+			// 	this.$refs.slide.initData(res.data)
+			// })
 			
 		}
 		
