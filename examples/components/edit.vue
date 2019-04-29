@@ -35,7 +35,7 @@
 		  	}
 		},
 		// 上传图片
-		async upload(file, type) {
+		async upload(file) {
 			this.$waiting.add()
 			const options = {
 				url: UPLOAD_URL,
@@ -48,15 +48,9 @@
 				},
 				data: file
 			}
-			const {data} = await axios(options)
+			const { data } = await axios(options)
 			const path = READ_URL + data.path
-			if(type === 'img') {
-				this.$refs.slide.createImgDom(path)
-			}else if(type === 'bacImg') {
-				this.$refs.slide.createBacImgDom(path)
-			}
-			this.$waiting.close()
-			
+			this.$refs.slide.createImg(path)
 		},
 		
 		// 存储ppt数据

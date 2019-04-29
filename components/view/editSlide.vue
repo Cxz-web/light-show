@@ -169,6 +169,7 @@
 		name: 'edit-slide',
 		data() {
 			return {
+				addType: null,
 				bacShadowLeft: '',
 				bacShadowRight: '', 
 				bacSelect: null,
@@ -261,6 +262,7 @@
 		
 		beforeDestroy() {
 			window.onresize = null
+			this.$waiting.close()
 		},
 		
 		watch: {
@@ -514,10 +516,13 @@
 			
 			// 添加图片
 			addImg(e, type) {
-				let source = e.target.files[0]
-				let reader = new FileReader();
-				let file = new FormData();
-				file.append('file', source);
+				let oDom = e.target
+				if( oDom.value === '') return 
+				this.addType = type
+				let source = oDom.files[0]
+				let file = new FormData()
+				file.append('file', source)
+				oDom.value = ''
 				this.$emit('upload', file, type)
 			},
 			
@@ -537,6 +542,15 @@
 				this.addMoveListen(oVideo)
 				this.$refs.ppt.append(oVideo)
 				oVideo.play()
+			},
+			
+			createImg(path) {
+				if(this.addType === 'bacImg') {
+					this.createBacImgDom(path)
+				}else {
+					this.createImgDom(path)
+				}
+				this.$waiting.close()
 			},
 			
 			createBacImgDom(imgURL) {
