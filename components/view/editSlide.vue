@@ -109,11 +109,11 @@
 					<!-- 视频类特殊操作栏 -->
 					<template v-if="domType=='video'">
 						<div class="edit__box" >
-							<div class="title__size"><span class="title__name">地址:</span><input class="font__input" style="border-bottom: 1px solid white;" type="text" v-model="videoSrc"></div>
+							<div class="title__size"><span class="title__name">地址:</span><input  class="font__input" style="border-bottom: 1px solid white;" type="text" v-model="videoSrc"></div>
 						</div>
 						
 						<div class="edit__box">
-							<div class="title__size"><span class="title__name">模糊度</span><input class="font__input" type="text" v-model="blur"></div>
+							<div class="title__size"><span class="title__name">模糊度</span><input  class="font__input" type="text" v-model="blur"></div>
 						</div>
 					</template>
 					
@@ -125,7 +125,7 @@
 					</div>
 					
 					<div class="edit__box">
-						<div class="title__size"><span class="title__name">宽度:</span><input class="font__input" type="text" v-model="currentWidth"></div>
+						<div class="title__size"><span class="title__name">宽度:</span><input @keydown="down($event)" class="font__input" type="text" v-model="currentWidth"></div>
 						<div class="title__size"><span class="title__name">高度:</span><input class="font__input" type="text" v-model="currentHeight"></div>
 					</div>
 					
@@ -337,6 +337,9 @@
 		},
 		
 		methods: {
+			down(e) {
+				this.currentWidth ++
+			},
 			openBacWrap() {
 				this.showBacWrap = !this.showBacWrap
 				this.showBacColor = false
@@ -529,7 +532,7 @@
 			// 添加视频
 			addVideo() {
 				let oVideo = document.createElement('video')
-				oVideo.style = 'transition: transfrom linear 1s;transition: opacity linear 1s;position:absolute;width:20%;height:20%;z-index:0;object-fit: fill;background-color:#a93f17;outline:none;'
+				oVideo.style = 'transition: transfrom linear 1s;transition: opacity linear 1s;position:absolute;width:20%;height:20%;z-index:0;object-fit: fill;outline:none;'
 				oVideo.classList.add('__video')
 				oVideo.dataset.cTarget = this.target++
 				oVideo.dataset.domType = 'video'
