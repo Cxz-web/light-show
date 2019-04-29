@@ -5,8 +5,8 @@
 ### 简介
 
 + 一个vue框架下轻量级的类PPT**演示文稿制作库**, 集合了在线内容编辑和演示的功能。
-+ 完全重新开发的一套库，和impress.js等其它ppt库不一样的地方是 ，本插件能完全对内容（图片，视频，文字）进行**逐步**展示而不是只能通过换页，并且不需要代码进行构建内容(如插入html或者读取markdown),通过编辑器尽可能还原ppt的基础功能，但操作起来更加的简单。
-+ 通过一些开放的api, 可以自定义一些文稿展示的细节。
++ 相较于传统在线文档网页，例如金山的在线ppt，功能足够强大（但是真的有点卡），light-show足够的轻量与流畅，过渡效果酷炫，而且制作简单，足以轻松应付一些应急的场景，要是您不熟悉使用ppt，本插件是您很好的选择！！！
++ 完全重新开发的一套库，和impress.js等其它ppt库不一样的地方是 ，能完全对内容（图片，视频，文字）进行**逐步**展示而不仅仅只能通过换页，并且不需要代码进行构建内容(如插入html或者读取markdown),通过编辑器尽可能还原ppt的基础功能，但操作起来更加的简单。
 + 国际惯例，在线demo。
   +  效果演示地址： https://www.cxzweb.club/#/light-show/read
   + 编辑器展示地址： https://www.cxzweb.club/#/light-show/edit
@@ -92,11 +92,7 @@ export default {
             }
             const {data} = await axios(options)
             const path = data.path
-            if(type === 'img') {
-                this.$refs.slide.createImgDom(path)
-            }else if(type === 'bacImg') {
-                this.$refs.slide.createBacImgDom(path)
-            }
+            this.$refs.slide.createImg(path)
         }
     }
     /* 其它代码 */
@@ -132,14 +128,10 @@ export default {
 
 
 
-+ **createBacImgDom( path `string `)**
++ **createImg( path `string `)**
   + 生成当前页的背景图像
   + path `string`  ： 图片的地址。
-  + 示例：`this.$refs.lightShow.createBacImgDom(path)` ， 父组件调用子组件的方法。
-+ **createImgDom( path `string`)**
-  + 生成图片节点
-  + path`string`: 服务器返回的图片的地址
-  + this.$refs.lightShow.createImgDom(path)
+  + 示例：`this.$refs.lightShow.createImg(path)` ， 父组件调用子组件的方法。
 
 ### ReadSlide组件（阅读器）
 
@@ -223,16 +215,22 @@ this.$waiting.add()
 this.$waiting.close()
 ~~~
 
-### 更新
+### 最近更新
 
-由于该版本还在功能完善阶段，更新会比较频繁， 后续的变动都会在此处说明。
++ 由于该版本还在功能完善阶段，更新会比较频繁， 后续的变动都会在此处说明。
+
+### 下版本预期更新功能
+
++ 提供在线服务（免费、免费、免费）， 希望能帮助到一些不想暂时还木有自己服务器的小伙伴或者应急应付个报告什么的。
++ 文字的操作更加丰富
++ 下载成PPT（重点研究这一部分功能）
 
 ### 结语
 
 + 做这个的原因其中一点是自己不怎么熟练使用ppt软件， 感觉很麻烦，所以想自己弄个比较简单的，基本功能满足需求的编辑器来，应付年终总结呀什么的。
 
 + 该项目会一直维护下去， 有bug一定会火速修复，欢迎提问，大家一起交流，一起学习 😁。
-+ 后续的目标：
++ 终极目标：
   + 各种动画可以增加自定义功能
   + 现在可以依靠后台生成简单的ppt，打算研究直接从前端生成ppt文件，不知道有没小伙伴有经验呢?指教指教我😊😊😊😊。
   + 完成更加细粒度的展示， 但是前提是操作一定要简单！！！。
