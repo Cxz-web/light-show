@@ -89,6 +89,9 @@
 					data = JSON.parse(data)
 				}
 				
+				// 去除多维数组无效项
+				this.filterArray(data[0])
+				
 				READ_DATA = data[0]
 				LENGTH = READ_DATA.length
 				BAC_DATA = data[1]
@@ -122,6 +125,28 @@
 					})
 				}
 			},
+			
+			// 去除空项
+			
+			filterArray(data) {
+				for(let i = data.length - 1; i >= 0 ; --i) {
+					if(!data[i]){
+						data.splice(i, 1)
+					} else if(Array.isArray(data[i])) {
+						let value = this.filterArray(data[i])
+						if(!value){
+							data.splice(i, 1)
+						}
+					}
+				}
+				if(data.length === 0) {
+					return false
+				}else {
+					return data
+				}
+			},
+			
+			
 			
 			close() {
 				this.$emit('close')
