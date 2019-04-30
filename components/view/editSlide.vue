@@ -125,7 +125,7 @@
 					</div>
 					
 					<div class="edit__box">
-						<div class="title__size"><span class="title__name">宽度:</span><input @keydown="down($event)" class="font__input" type="text" v-model="currentWidth"></div>
+						<div class="title__size"><span class="title__name">宽度:</span><input @keyup="down($event)" class="font__input" type="text" v-model="currentWidth"></div>
 						<div class="title__size"><span class="title__name">高度:</span><input class="font__input" type="text" v-model="currentHeight"></div>
 					</div>
 					
@@ -311,11 +311,21 @@
 			},
 			
 			currentOrder(newValue) {
-				this.currentDom.dataset.order = parseInt(newValue)
+				const value = parseInt(newValue)
+				if(value < 0) {
+					this.currentOrder = 0
+					return
+				}
+				this.currentDom.dataset.order = value
 			},
 			
 			currentLeaveOrder(newValue) {
-				this.currentDom.dataset.leaveOrder = newValue
+				const value = parseInt(newValue)
+				if(value < this.currentOrder) {
+					this.currentLeaveOrder = this.currentOrder
+					return
+				}
+				this.currentDom.dataset.leaveOrder = value
 			},
 			
 			bacLeft(newValue) {
