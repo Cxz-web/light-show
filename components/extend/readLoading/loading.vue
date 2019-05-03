@@ -11,7 +11,7 @@
 			<div class="loading__icon"></div>
 		</div>
 		
-		<div class="loading__tip">正在加载所有资源 <i class="tip__icon"></i></div>
+		<div class="loading__tip">正在加载所有资源(图片资源比较多，请耐心等待) <i class="tip__icon"></i></div>
 		
 	
 		
