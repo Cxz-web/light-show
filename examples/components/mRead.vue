@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		
-		<div class="github__wrap animated pulse" v-if="showWrap" @click="openEdit"><div class="edit__address">编辑器地址</div></div>
+		<!-- <div class="github__wrap animated pulse" v-if="showWrap" @click="openEdit"><div class="edit__address">编辑器地址</div></div> -->
 		
 		
 	</div>
