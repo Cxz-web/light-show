@@ -1,8 +1,11 @@
 import Vue from "vue";
 
-// 核心组件
+// pc
 import EditSlide from "./view/editSlide.vue"
 import ReadSlide from "./view/readSlide.vue"
+
+// mobile
+import MEdit from './view/mEdit.vue'
 
  // 辅助组件
  import waiting from './extend/bac/bac.js'
@@ -26,7 +29,8 @@ import ReadSlide from "./view/readSlide.vue"
 
 const Components = [
     EditSlide,
-	ReadSlide
+	ReadSlide,
+	MEdit
 ]
 
 
@@ -49,7 +53,8 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default {
 	install,
 	EditSlide,
-	ReadSlide
+	ReadSlide,
+	MEdit
 }
 
 

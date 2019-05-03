@@ -28,6 +28,7 @@
 		data() {
 			return{
 				height: 0,
+				width: 0,
 				currentPage: 0,
 				currentStep: 0,
 				canNext: true,
@@ -76,7 +77,7 @@
 		methods: {
 			initData(requestData) {
 				this.height = document.body.clientHeight
-
+				this.width = this.$refs.ppt.clientWidth
 				let data = requestData ? requestData : JSON.parse(localStorage.getItem('cxzppt'))
 				
 				if(!data) {
@@ -175,33 +176,33 @@
 				}
 			},
 			
-			createDom() {
-				this.last = false
-				READ_DATA[this.currentPage].forEach((domList) => {
-					domList.forEach((item) => {
-						let oDom = document.createElement('div')
-						
-						item.css.forEach((className) => {
-							oDom.classList.add(className)
-						})
-						oDom.style = item.style
-						if(item.content) {
-							oDom.innerHTML = item.content
-						}
-						oDom.id = item.id
-						oDom.class = item.css
-						oDom.classList.add('animated')
-						if(item.moveIn) {
-							oDom.classList.add(item.moveIn)
-						}
-						if(item.fontSize) {
-							oDom.style.fontSize = parseFloat(item.fontSize) * this.height + 'px'
-						}
-						this.$refs.ppt.append(oDom)
-						
-					})
-				})
-			},
+			// createDom() {
+			// 	this.last = false
+			// 	READ_DATA[this.currentPage].forEach((domList) => {
+			// 		domList.forEach((item) => {
+			// 			let oDom = document.createElement('div')
+			// 			
+			// 			item.css.forEach((className) => {
+			// 				oDom.classList.add(className)
+			// 			})
+			// 			oDom.style = item.style
+			// 			if(item.content) {
+			// 				oDom.innerHTML = item.content
+			// 			}
+			// 			oDom.id = item.id
+			// 			oDom.class = item.css
+			// 			oDom.classList.add('animated')
+			// 			if(item.moveIn) {
+			// 				oDom.classList.add(item.moveIn)
+			// 			}
+			// 			if(item.fontSize) {
+			// 				oDom.style.fontSize = parseFloat(item.fontSize) * this.height + 'px'
+			// 			}
+			// 			this.$refs.ppt.append(oDom)
+			// 			
+			// 		})
+			// 	})
+			// },
 			
 			
 			next() {
@@ -262,6 +263,11 @@
 						oDom = document.createElement('video')
 						oDom.src = item.src
 						oDom.autoplay = "true"
+						oDom.setAttribute('playsinline', 'true')
+						oDom.setAttribute('x-webkit-airplay', 'true')
+						oDom.setAttribute('webkit-playsinline', 'true')
+						oDom.setAttribute('x5-video-player-type', 'h5')
+
 						
 					}else {
 						oDom = document.createElement('div')
@@ -283,6 +289,11 @@
 					if(item.fontSize) {
 						oDom.style.fontSize = parseFloat(item.fontSize) * this.height + 'px'
 					}
+					
+					if(item.mFont) {
+						oDom.style.fontSize = parseFloat(item.fontSize) * this.width + 'px'
+					}
+					
 					this.$refs.ppt.append(oDom)
 					
 				}

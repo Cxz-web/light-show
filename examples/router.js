@@ -17,10 +17,18 @@ export default new Router({
 		{
 			path: '/light-show/read',
 			component: () => import('./components/read.vue')
-		},
+		},	
 		{
 			path: '/light-show/error',
 			component: () => import('./components/error.vue')
+		},
+		{
+			path: '/light-show/mEdit',
+			component: () => import('./components/mEdit.vue')
+		},
+		{
+			path: '/light-show/mRead/:id',
+			component: () => import('./components/mRead.vue')
 		}
 	]
 })

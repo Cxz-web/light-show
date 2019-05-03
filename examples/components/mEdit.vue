@@ -1,6 +1,6 @@
 <template>
 	<div class="example__read">
-		<edit-slide @upload="upload"  @saveData="saveData" ref="slide"></edit-slide>
+		<m-edit @upload="upload"  @saveData="saveData" ref="slide"></m-edit>
 	</div>
 </template>
 
@@ -15,10 +15,14 @@
 	  data() {
 		  return {
 			uploadURL: null,
-			readURL: null
+			readURL: null,
+			id: null,
+			fileName: null
 		  }
 	  },
 	  created() {
+		  this.setFileName()
+		  this.id = this.$route.params.id
 		  this.uploadURL = UPLOAD_URL
 		  this.readURL = READ_URL
 		  this.judgeSystem()
@@ -34,6 +38,20 @@
 		  		this.$router.push('/light-show/error')
 		  	}
 		},
+		
+		
+		
+		setFileName() {
+			const name = localStorage .getItem('LIGHT_SHOW_NAME')
+			if(name){
+				this.fileName = name
+			}else{
+				this.fileName = Math.random() + 'ppt'
+				localStorage.setItem('LIGHT_SHOW_NAME', this.fileName)
+			}
+			
+		},
+		
 		// 上传图片
 		async upload(file) {
 			this.$waiting.add()
@@ -54,19 +72,33 @@
 		},
 		
 		// 存储ppt数据
-		saveData(stringData) {
-			localStorage.setItem('cxzppt', stringData)
+		async saveData(stringData) {
+			await axios.post('https://www.cxzweb.club/api/saveData', {
+				content: stringData,
+				id: this.fileName
+			})
+			// localStorage.setItem('cxzppt', stringData)
 			this.$tip({content: '保存成功'})
 		},
 		
 		// 读取记录的ppt数据
-		readData() {
-			let data = localStorage.getItem('cxzppt')
-			let json = data ? JSON.parse(data) : undefined
-			this.$refs.slide.initData(json)
-			
+		async readData(name) {
+			const { data } = await axios.post('https://www.cxzweb.club/api/getData', {
+				id: this.fileName
+			})
+			const content = data.content
+			if(content) {
+				let string = content.ppt_data
+				let json = string ? JSON.parse(string) : undefined
+				this.$refs.slide.initData(json)
+			}else{
+				this.$refs.slide.initData(undefined)
+			}
+			const testURL = `http://192.168.1.100:8080/#/light-show/mRead/${this.fileName}`
+			const url = `https://www.cxzweb.club/#/light-show/mRead/${this.fileName}`
+			this.$refs.slide.getCode(testURL)
 		}
-		
+			
 	  }
 	  
 	}
