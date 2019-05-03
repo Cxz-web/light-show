@@ -1,161 +1,166 @@
 <template>
 	<div class="edit__main" @click="cancaleSelect($event)" ref="main">
-		<div class="edit"  ref="wrap">
-			<read-slide v-if="showRead" @close="close" ref="readSlide"></read-slide>
-			
-			
-			<div class="edit__wrap" ref="ppt"></div>
-			
-			<div class="ppt_page">第&nbsp;{{currentPage + 1}}&nbsp;页</div>
-			<div class="edit__operation">
-				<div class="edit__select" v-show="!showTitle">
-					
-					
-					<div class="edit__box edit__title" @click="toBack">
-						<div class="edit__icon back_icon"></div>
-						<div class="title_tip">上一页</div>
-					</div>
-					
-					<div class="edit__box">
-						<label class="edit__icon bac_icon" >
-							<input type="file" style=" display: none;" @change="addImg($event, 'bacImg')" ref="bacSource">
-						</label>
-						<div class="title_tip">背景图</div>
-					</div>
-					
-					<div class="edit__box edit__title" @click="addTitle">
-						<div class="edit__icon title_icon"></div>
-						<div class="title_tip">文本框</div>
-					</div>
-					
-					
-					
-					<div class="edit__box edit__title" @click="save">
-						<div class="edit__icon sava_icon" ></div>
-						<div class="sava_tip">保存</div>
-					</div>
-					
-					<div class="edit__box edit__title" @click="openRead">
-						<div class="edit__icon read_icon" ></div>
-						<div class="title_tip" >预览</div>
-					</div>
-					
-					<div class="edit__box edit__title" @click="addVideo">
-						<div class="edit__icon video_icon" ></div>
-						<div class="title_tip" >视频</div>
-					</div>
-					
-					
-					<div class="edit__box edit__title" >
-						<div class="edit__icon box__icon" @click="openBacWrap"></div>
-						<div class="title_tip" >背景色</div>
-						<transition name="fade">
-							<div class="bac__wrap" v-show="showBacWrap">
-								<div class="bac__box"><input type="text" class="font__input bac__input" v-model="bacLeft"> <span class="bac__color" @click="openBacColor(true)" :style="{backgroundColor: bacLeft, boxShadow: bacShadowLeft}"></span></div>
-								<div class="bac__box"><input type="text" class="font__input bac__input" v-model="bacRight"> <span class="bac__color" @click="openBacColor(false)" :style="{backgroundColor: bacRight, boxShadow: bacShadowRight}"></span></div>
-								
-								<transition name="fade">
-									<div class="color__picker color__picker--bac" v-show="showBacColor">
-										<div class="cp-default cx-default" ref="bacColor"></div>
-									</div>
-								</transition>
-							</div>
-						</transition>
-					</div>
-					
-					
-					<div class="edit__box edit__title" >
-						<label class="edit__icon img_icon" >
-							<input type="file" style=" display: none;" @change="addImg($event, 'img')" ref="source">
-						</label>
-						<div class="title_tip">图片</div>
-					</div>
-					
-					
-					<div class="edit__box edit__title" @click="toNext">
-						<div class="edit__icon next_icon" ></div>
-						<div class="title_tip">下一页</div>
-					</div>
-					
-					
+		
+		<div class="edit__code">
+			<canvas ref="qrcode" class="edit__canvas" ></canvas>
+			<div>手机扫码</div>
+			<div>直接预览效果哦!</div>
+		</div>
+		
+		
+		<div class="edit__operation">
+			<div class="edit__select" v-show="!showTitle">
+				
+				
+				<div class="edit__box edit__title" @click="toBack">
+					<div class="edit__icon back_icon"></div>
+					<div class="title_tip">上一页</div>
 				</div>
 				
-				<!-- 文字操作框 -->
-				<div class="title__operation" v-show="showTitle">
-					
-					
-					<div class="edit__box" @click="cancelDom">
-						<div class="edit__icon cancel_icon"></div>
-						<div class="title_tip">删除</div>
-					</div>
-					
-					
-					<div class="edit__box" v-show="domType==='title'" @click="addBold">
-						<div class="edit__icon B_icon" :class="{BB_icon: currentBold==='bold'}"></div>
-						<div class="title_tip">加粗</div>
-					</div>
-					
-					<div class="edit__box" @click="showMove= !showMove">
-						<div class="edit__icon move_icon"></div>
-						<div class="title_tip" >动画</div>
-						
-						<transition name="bounce">
-							<div class="move__select" v-show="showMove">
-								<div class="move__btn" :class="{slect__move: index==currentMove }" v-for="(item, index) in moveList" @click.stop="addMove(item, index)"><span class="animated infinite" style="animation-duration: 2s;" :class="item">Animate</span></div>
-							</div>
-						</transition>
-					</div>
-					
-					<!-- 视频类特殊操作栏 -->
-					<template v-if="domType=='video'">
-						<div class="edit__box" >
-							<div class="title__size"><span class="title__name">地址:</span><input  class="font__input" style="border-bottom: 1px solid white;" type="text" v-model="videoSrc"></div>
-						</div>
-						
-						<div class="edit__box">
-							<div class="title__size"><span class="title__name">模糊度</span><input  class="font__input" type="text" v-model="blur"></div>
-						</div>
-					</template>
-					
-					
-					<div class="edit__box">
-						<div class="title__size" v-if="domType==='title'"><span class="title__name">size:</span><input class="font__input" type="text" v-model="fontSize"></div>
-						<div class="title__size" v-if="domType==='img'"><span class="title__name">opacity:</span><input class="font__input" type="text" v-model="currentOpacity"></div>
-						<div class="title__size"><span class="title__name">level:</span><input class="font__input" type="text" v-model="currentLevel"></div>
-					</div>
-					
-					<div class="edit__box">
-						<div class="title__size"><span class="title__name">宽度:</span><input @key="down($event)" class="font__input" type="text" v-model="currentWidth"></div>
-						<div class="title__size"><span class="title__name">高度:</span><input class="font__input" type="text" v-model="currentHeight"></div>
-					</div>
-					
-					
-					
-					<div class="edit__box">
-						<div class="title__size"><span class="title__name" style="width:100px;">出场顺序:</span><input class="font__input" type="text" v-model="currentOrder"></div>
-						<div class="title__size"><span class="title__name" style="width:100px">离场顺序:</span><input class="font__input" type="text" v-model="currentLeaveOrder"></div>
-					</div>
-					
-					<div class="edit__box">
-						<div class="title__size"><span class="title__name">X坐标:</span><input class="font__input" type="text" v-model="currentX"></div>
-						<div class="title__size"><span class="title__name">Y坐标:</span><input class="font__input" type="text" v-model="currentY"></div>
-					</div>
-					
-					<div class="edit__box">
-						<div class="title__size"><span class="title__name">颜色:</span><span class="color__box" @click="openColor(0, $event)" ref="color1"></span></div>
-						<div class="title__size"><span class="title__name">背景:</span><span class="color__box" @click="openColor(1, $event)" ref="color2"></span></div>
-						<transition name="fade">
-							<div class="color__picker" v-show="showColor">
-								<div class="cp-default cx-default" ref="color"></div>
-							</div>
-						</transition>
-					</div>
-					
-					
+				<div class="edit__box">
+					<label class="edit__icon bac_icon" >
+						<input type="file" style=" display: none;" @change="addImg($event, 'bacImg')" ref="bacSource">
+					</label>
+					<div class="title_tip">背景图</div>
 				</div>
+				
+				<div class="edit__box edit__title" @click="addTitle">
+					<div class="edit__icon title_icon"></div>
+					<div class="title_tip">文本框</div>
+				</div>
+				
+				
+				
+				<div class="edit__box edit__title" @click="save">
+					<div class="edit__icon sava_icon" ></div>
+					<div class="sava_tip">保存</div>
+				</div>
+				
+
+				
+				<div class="edit__box edit__title" @click="addVideo">
+					<div class="edit__icon video_icon" ></div>
+					<div class="title_tip" >视频</div>
+				</div>
+				
+				
+				<div class="edit__box edit__title" >
+					<div class="edit__icon box__icon" @click="openBacWrap"></div>
+					<div class="title_tip" >背景色</div>
+					<transition name="fade">
+						<div class="bac__wrap" v-show="showBacWrap">
+							<div class="bac__box"><input type="text" class="font__input bac__input" v-model="bacLeft"> <span class="bac__color" @click="openBacColor(true)" :style="{backgroundColor: bacLeft, boxShadow: bacShadowLeft}"></span></div>
+							<div class="bac__box"><input type="text" class="font__input bac__input" v-model="bacRight"> <span class="bac__color" @click="openBacColor(false)" :style="{backgroundColor: bacRight, boxShadow: bacShadowRight}"></span></div>
+							
+							<transition name="fade">
+								<div class="color__picker color__picker--bac" v-show="showBacColor">
+									<div class="cp-default cx-default" ref="bacColor"></div>
+								</div>
+							</transition>
+						</div>
+					</transition>
+				</div>
+				
+				
+				<div class="edit__box edit__title" >
+					<label class="edit__icon img_icon" >
+						<input type="file" style=" display: none;" @change="addImg($event, 'img')" ref="source">
+					</label>
+					<div class="title_tip">图片</div>
+				</div>
+				
+				
+				<div class="edit__box edit__title" @click="toNext">
+					<div class="edit__icon next_icon" ></div>
+					<div class="title_tip">下一页</div>
+				</div>
+				
+				
+			</div>
+			
+			<!-- 文字操作框 -->
+			<div class="title__operation" v-show="showTitle">
+				
+				
+				<div class="edit__box" @click="cancelDom">
+					<div class="edit__icon cancel_icon"></div>
+					<div class="title_tip">删除</div>
+				</div>
+				
+				
+				<div class="edit__box" v-show="domType==='title'" @click="addBold">
+					<div class="edit__icon B_icon" :class="{BB_icon: currentBold==='bold'}"></div>
+					<div class="title_tip">加粗</div>
+				</div>
+				
+				<div class="edit__box" @click="showMove= !showMove">
+					<div class="edit__icon move_icon"></div>
+					<div class="title_tip" >动画</div>
+					
+					<transition name="bounce">
+						<div class="move__select" v-show="showMove">
+							<div class="move__btn" :class="{slect__move: index==currentMove }" v-for="(item, index) in moveList" @click.stop="addMove(item, index)"><span class="animated infinite" style="animation-duration: 2s;" :class="item">Animate</span></div>
+						</div>
+					</transition>
+				</div>
+				
+				<!-- 视频类特殊操作栏 -->
+				<template v-if="domType=='video'">
+					<div class="edit__box" >
+						<div class="title__size"><span class="title__name">地址:</span><input  class="font__input" style="border-bottom: 1px solid white;" type="text" v-model="videoSrc"></div>
+					</div>
+					
+					<div class="edit__box">
+						<div class="title__size"><span class="title__name">模糊度</span><input  class="font__input" type="text" v-model="blur"></div>
+					</div>
+				</template>
+				
+				
+				<div class="edit__box">
+					<div class="title__size" v-if="domType==='title'"><span class="title__name">size:</span><input class="font__input" type="text" v-model="fontSize"></div>
+					<div class="title__size" v-if="domType==='img'"><span class="title__name">opacity:</span><input class="font__input" type="text" v-model="currentOpacity"></div>
+					<div class="title__size"><span class="title__name">level:</span><input class="font__input" type="text" v-model="currentLevel"></div>
+				</div>
+				
+				<div class="edit__box">
+					<div class="title__size"><span class="title__name">宽度:</span><input @key="down($event)" class="font__input" type="text" v-model="currentWidth"></div>
+					<div class="title__size"><span class="title__name">高度:</span><input class="font__input" type="text" v-model="currentHeight"></div>
+				</div>
+				
+				
+				
+				<div class="edit__box">
+					<div class="title__size"><span class="title__name" style="width:100px;">出场顺序:</span><input class="font__input" type="text" v-model="currentOrder"></div>
+					<div class="title__size"><span class="title__name" style="width:100px">离场顺序:</span><input class="font__input" type="text" v-model="currentLeaveOrder"></div>
+				</div>
+				
+				<div class="edit__box">
+					<div class="title__size"><span class="title__name">X坐标:</span><input class="font__input" type="text" v-model="currentX"></div>
+					<div class="title__size"><span class="title__name">Y坐标:</span><input class="font__input" type="text" v-model="currentY"></div>
+				</div>
+				
+				<div class="edit__box">
+					<div class="title__size"><span class="title__name">颜色:</span><span class="color__box" @click="openColor(0, $event)" ref="color1"></span></div>
+					<div class="title__size"><span class="title__name">背景:</span><span class="color__box" @click="openColor(1, $event)" ref="color2"></span></div>
+					<transition name="fade">
+						<div class="color__picker" v-show="showColor">
+							<div class="cp-default cx-default" ref="color"></div>
+						</div>
+					</transition>
+				</div>
+				
 				
 			</div>
 		</div>
+		
+		<div class="ppt_page">第&nbsp;{{currentPage + 1}}&nbsp;页</div>
+		<div class="edit"  ref="wrap">
+			<read-slide v-if="showRead" @close="close" ref="readSlide"></read-slide>
+
+			<div class="edit__wrap" ref="ppt"></div>
+		</div>
+		
+		
 	</div>
 </template>
 
@@ -165,8 +170,9 @@
 	let READ_DATA = null
 	let colorPick = null
 	import ColorPicker from '../public/js/colorpicker.js'
+	const QRCode = require('qrcode')
 	export default {
-		name: 'edit-slide',
+		name: 'm-edit',
 		data() {
 			return {
 				addType: null,
@@ -275,8 +281,10 @@
 					this.fontSize = 3.2
 					return
 				}
-				this.currentDom.style.fontSize = newValue + 'px'
-				this.currentDom.dataset.fontSize = newValue / this.wrapH
+	
+				this.currentDom.dataset.fontSize = parseFloat(newValue) / this.wrapW
+				this.currentDom.style.fontSize = parseFloat(this.currentDom.dataset.fontSize) * this.wrapW + 'px'
+				
 			},
 			
 			videoSrc(newValue) {
@@ -341,6 +349,14 @@
 		},
 		
 		methods: {
+			
+			getCode(url) {
+				let canvas = this.$refs.qrcode
+				QRCode.toCanvas(canvas, url, function (error) {
+					if (error) console.error(error)
+				})
+			},
+			
 			down(e) {
 				this.currentWidth ++
 			},
@@ -421,12 +437,12 @@
 				this.sW = document.body.clientWidth 
 				this.sH = document.body.clientHeight
 				
-				this.$refs.wrap.style.height = this.sH / this.sW * this.$refs.wrap.clientWidth + 60 + 'px'
 				this.wrapH = this.$refs.ppt.clientHeight
 				this.wrapW = this.$refs.ppt.clientWidth
 				
 				this.offsetX = this.$refs.wrap.offsetLeft
 				this.offsetY = this.$refs.wrap.offsetTop 
+
 			},
 			
 			// 下一页
@@ -502,7 +518,8 @@
 			addTitle() {
 				let oInput = document.createElement('input')
 				oInput.style = 'transition: transfrom linear 1s;transition: opacity linear 1s;position:absolute;font-size:20px;width:20%;height:6%;z-index:0;text-align: left;white-space: nowrap;'
-				oInput.dataset.fontSize = 20 / this.wrapH
+				oInput.dataset.fontSize = 20 / this.wrapW
+				oInput.dataset.mFont = true
 				oInput.classList.add('__input')
 				oInput.dataset.cTarget = this.target++
 				oInput.dataset.domType = 'title'
@@ -541,7 +558,7 @@
 				oVideo.id = 'cxz' + this.id ++
 				oVideo.controls = 'controls'
 				oVideo.loop = 'loop'
-				oVideo.src = 'https://api.cxzweb.club/test.mp4' 
+				oVideo.src = 'https://api.cxzweb.club/test.mp4'
 				this.addMoveListen(oVideo)
 				this.$refs.ppt.append(oVideo)
 				oVideo.play()
@@ -630,7 +647,7 @@
 				SAVE_TEMP[2] = this.loadList // 预加载数量
 				SAVE_TEMP[3] = this.id + 1
 				SAVE_DATA = JSON.stringify(SAVE_TEMP)
-				this.$emit('saveData', SAVE_DATA)
+				this.$emit('saveData', SAVE_DATA, this.fileName)
 			},
 			
 			
@@ -751,59 +768,82 @@
 	@import url("../public/css/themes.css");
 	
 	.edit{
-		width: 83%;
+		width: 375px;
 		background-color: white;
 		display: flex;
+		height: 667px;
 		flex-direction: column;
 		box-shadow: 0px 1px 10px 1px mintcream;
 		border-radius: 10px;
 		overflow: hidden;
 		position: relative;
+		margin-bottom: 5px;
 	}
 	
 	.edit__main{
 		display: flex;
 		justify-content: center;
+		flex-direction:  column-reverse;
 		align-items: center;
 		width: 100%;
 		height: 100%;
 		background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
+		position: relative;
+		box-sizing: border-box;
+		padding-top: 10px;
 		/* background-image: linear-gradient(19deg, #FAACA8 0%, #DDD6F3 100%); */
 		
 	}
 	
 	.edit__wrap{
-		height: calc(100% - 60px);
+		height: 100%;
 		border-bottom: none;
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
-		position: absolute;
 		width: 100%;
+		
 	}
 	
 	.ppt_page{
-		position: absolute;
-		bottom: 65px;
-		left: 50%;
-		transform: translateX(-50%);
+		font-size: 20px;		
 		color: lightslategray;
-		font-size: 1.8vmin;
 		vertical-align: baseline;
-		color: #00b7c3;
+		color: white;
 		user-select: none;
+		font-weight: bold;
+		font-family: cursive;
+	}
+	
+	.edit__code{
+		width: 164px;
+		height: 240px;
+		position: absolute;
+		left: 30px;
+		top: 40px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		text-align: center;
+		font-weight: bold;
+		color: white;
+		font-size: 20px;
+	}
+	
+	.edit__canvas{
+		height: 200px;
 	}
 	
 	.edit__operation{
 		height: 60px;
-		box-shadow: 0px -2px 5px rgba(0,0,0,0.3);
+		width: 95%;
+		box-shadow: 0px 0px 10px rgba(255,255,255,0.5);
 		background: lightseagreen; /* 标准的语法 */
-		display: flex;
-		align-items: center;
+		bottom: 10px;
 		color: white;
-		position: absolute;
-		bottom: 0px;
-		width: 100%;
+		border-radius: 15px;
+		margin-top: 20px;
+		
 	}
 	
 	.edit__select{
