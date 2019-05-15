@@ -10,6 +10,8 @@
 + 国际惯例，在线demo。
   +  效果演示地址： https://www.cxzweb.club/#/light-show/read
   + 编辑器展示地址： https://www.cxzweb.club/#/light-show/edit
+  + 手机编辑器： https://www.cxzweb.club/#/light-show/mEdit
+  + 手机预览： https://www.cxzweb.club/#/light-show/mRead
 ### 安装
 
 ```javascript
