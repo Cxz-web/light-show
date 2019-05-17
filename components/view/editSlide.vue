@@ -11,7 +11,7 @@
 				<div class="edit__select" v-show="!showTitle">
 					
 					
-					<div class="edit__box edit__title" @click="toBack">
+					 <div class="edit__box edit__title" @click="toBack">
 						<div class="edit__icon back_icon"></div>
 						<div class="title_tip">上一页</div>
 					</div>
