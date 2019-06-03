@@ -6,12 +6,13 @@
 
 + 一个vue框架下轻量级的类PPT**演示文稿制作库**, 集合了在线内容编辑和演示的功能。
 + 相较于传统在线文档网页，例如金山的在线ppt，功能足够强大（但是真的有点卡），light-show足够的轻量与流畅，过渡效果酷炫，而且制作简单，足以轻松应付一些应急的场景，要是您不熟悉使用ppt，本插件是您很好的选择！！！
++ 支持编辑电脑演示文档和手机H5宣传页， 插件集成在线编辑器。
 + 完全重新开发的一套库，和impress.js等其它ppt库不一样的地方是 ，能完全对内容（图片，视频，文字）进行**逐步**展示而不仅仅只能通过换页，并且不需要代码进行构建内容(如插入html或者读取markdown),通过编辑器尽可能还原ppt的基础功能，但操作起来更加的简单。
 + 国际惯例，在线demo。
-  +  效果演示地址： https://www.cxzweb.club/#/light-show/read
+  + 效果演示地址： https://www.cxzweb.club/#/light-show/read
   + 编辑器展示地址： https://www.cxzweb.club/#/light-show/edit
-  + 手机编辑器： https://www.cxzweb.club/#/light-show/mEdit
-  + 手机预览： https://www.cxzweb.club/#/light-show/mRead
+  + 手机编辑器(电脑打开)： https://www.cxzweb.club/#/light-show/mEdit
+  + 手机预览（电脑编辑后的效果）： https://www.cxzweb.club/#/light-show/mRead/0.9674458244867352ppt
 ### 安装
 
 ```javascript

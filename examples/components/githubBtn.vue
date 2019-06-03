@@ -1,23 +1,22 @@
 <template>
-	<div class="index__github" @click="openGitHub">
-		<span class="github__icon"></span>
-		<span class="github__title">GitHub</span>
-	</div>
+  <div class="index__github" @click="openGitHub">
+    <span class="github__icon" />
+    <span class="github__title">GitHub</span>
+  </div>
 </template>
 
 <script>
-	export default {
-		methods: {
-			openGitHub() {
-				this.$emit('openGitHub', 'https://github.com/Cxz-web/light-show')
-			}
-		}
-	}
+export default {
+  methods: {
+    openGitHub() {
+      this.$emit('openGitHub', 'https://github.com/Cxz-web/light-show')
+    }
+  }
+}
 </script>
 
-
 <style scoped>
-	
+
 	.index__github{
 		color: black;
 		font-size: 16px;
@@ -36,11 +35,11 @@
 		transition: transform .1s ease-in;
 		position: relative;
 	}
-	
+
 	.index__github:active {
 		transform: scale(1.2);
 	}
-	
+
 	.github__icon {
 		background-image: url(../assets/github.jpg);
 		width: 24px;

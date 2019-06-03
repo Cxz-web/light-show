@@ -9,7 +9,7 @@ import MEdit from './view/mEdit.vue'
 
  // 辅助组件
  import waiting from './extend/bac/bac.js'
- import readLoaing from './extend/readLoading/loading.js'
+import readLoaing from './extend/readLoading/loading.js'
  import tip from './extend/tip/tip.js'
  
  
