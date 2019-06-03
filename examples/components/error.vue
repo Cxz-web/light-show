@@ -1,22 +1,22 @@
 <template>
-	<div class="error">
-		<p class="error__title">对不起,</p>
-		<p class="error__title">暂时仅支持PC端编辑PPT。</p>
-	</div>
+  <div class="error">
+    <p class="error__title">对不起,</p>
+    <p class="error__title">暂时仅支持PC端编辑PPT。</p>
+  </div>
 </template>
 
 <script>
-	export default{
-		created() {
-			this.judgeSystem()
-		},
-		methods: {
-			judgeSystem() {
-				if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) return		
-					this.$router.push('/light-show/read')
-			}
-		}
-	}
+export default {
+  created() {
+    this.judgeSystem()
+  },
+  methods: {
+    judgeSystem() {
+      if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) return
+      this.$router.push('/light-show/read')
+    }
+  }
+}
 </script>
 
 <style scoped>

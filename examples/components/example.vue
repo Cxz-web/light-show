@@ -1,44 +1,43 @@
 <template>
-	<div class="index animated bounce">
-		<div class="index__title">
-			<span class="title__world" v-for="item in title">{{ item }}</span>
-		</div>
-		
-		<div class="index__desc">一个Vue框架下的的PPT编辑器和阅读器</div>
-		<div class="index__desc">来一起看看效果吧!!</div>
+  <div class="index animated bounce">
+    <div class="index__title">
+      <span v-for="item in title" :key="item" class="title__world">{{ item }}</span>
+    </div>
 
-		<div class="github">
-			<git-hub @openGitHub="openGitHub"></git-hub>
-		</div>
-		
-		<div class="index__icon"></div>
-		
-		
-		<div class="title__start animated rubberBand" @click="goRead">start</div>
-	</div>
+    <div class="index__desc">一个Vue框架下的的PPT编辑器和阅读器</div>
+    <div class="index__desc">来一起看看效果吧!!</div>
+
+    <div class="github">
+      <git-hub @openGitHub="openGitHub" />
+    </div>
+
+    <div class="index__icon" />
+
+    <div class="title__start animated rubberBand" @click="goRead">start</div>
+  </div>
 </template>
 
 <script>
-	import GitHub from './githubBtn.vue'
-	export default {
-		data() {
-			return {
-				title: 'light-show'
-			}
-		},
-		
-		components: {
-			GitHub
-		},
-		methods: {
-			openGitHub(url) {
-				window.open(url)
-			},
-			goRead() {
-				this.$emit('close')
-			}
-		}
-	}
+import GitHub from './githubBtn.vue'
+export default {
+
+  components: {
+    GitHub
+  },
+  data() {
+    return {
+      title: 'light-show'
+    }
+  },
+  methods: {
+    openGitHub(url) {
+      window.open(url)
+    },
+    goRead() {
+      this.$emit('close')
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -52,7 +51,7 @@
 		flex-direction: column;
 		align-items: center;
 	}
-	
+
 	.index__title{
 		height: 100px;
 		font-size: 81px;
@@ -104,19 +103,19 @@
 		transform: rotateZ(10deg);
 		color: purple;
 	}
-	
+
 	.index__desc{
 		color: white;
 		font-size: 40px;
 		margin-top: 50px;
 		font-family: cursive;
 	}
-	
+
 	.github{
 		margin-top: 80px;
 		margin-bottom: 10px;
 	}
-	
+
 	.index__icon {
 		background-image: url(../assets/starTag.svg);
 		width: 200px;
@@ -128,7 +127,6 @@
 		transform: rotateZ(30deg);
 	}
 
-	
 	.title__start{
 		color: white;
 		font-size: 90px;
